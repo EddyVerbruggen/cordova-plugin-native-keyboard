@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-native-keyboard"
+        version="0.0.5">
+
+  <name>NativeKeyboard</name>
+
+  <description>
+    This plugin allows you to tweak the iOS keyboard in many ways
+    previously only possible in native apps.
+  </description>
+
+  <author>Eddy Verbruggen</author>
+
+  <license>MIT</license>
+
+  <keywords>Keyboard, Accessorybar, Messenger, Toolbar, FontAwesome</keywords>
+
+  <repo>https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard.git</repo>
+
+  <issue>https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/issues</issue>
+
+  <engines>
+    <engine name="cordova" version=">=3.0.0"/>
+  </engines>
+
+  <platform name="ios">
+    <js-module src="www/NativeKeyboard.js" name="NativeKeyboard">
+      <clobbers target="window.NativeKeyboard" />
+    </js-module>
+
+    <config-file target="config.xml" parent="/*">
+      <feature name="NativeKeyboard">
+        <param name="ios-package" value="CDVNativeKeyboard"/>
+        <param name="onload" value="true"/>
+      </feature>
+    </config-file>
+
+    <header-file src="src/ios/CDVNativeKeyboard.h"/>
+    <source-file src="src/ios/CDVNativeKeyboard.m"/>
+
+    <header-file src="src/ios/NKSLKTextViewController.h"/>
+    <source-file src="src/ios/NKSLKTextViewController.m"/>
+
+    <framework src="src/ios/lib/NativeKeyboard.framework" custom="true" />
+    
+    <!-- The font has been added by the framework, the only thing left is adding a reference -->
+    <config-file target="*-Info.plist" parent="UIAppFonts">
+      <array>
+        <string>FontAwesome.ttf</string>
+      </array>
+    </config-file>
+    
+    <!--<hook type="after_plugin_install" src="src/ios/hooks/somethingsomething.js"/>-->
+  </platform>
+
+</plugin>

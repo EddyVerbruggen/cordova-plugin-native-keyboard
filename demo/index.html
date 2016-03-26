@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="format-detection" content="telephone=no">
+      <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport"
+          content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+          <link rel="stylesheet" type="text/css" href="css/index.css">
+            <title>Hello World</title>
+  </head>
+  <body>
+    <div class="app">
+      <h2>Native Keyboard</h2>
+
+      <div id="deviceready" class="blink">
+        <p class="event listening">Connecting to Device</p>
+        
+        <!--br/><input type="text" value="bla 1" autocorrect="off" style="font-size:15px" /><br/><br/>
+        
+        <br/><input type="text" value="bla 2" autocorrect="on" style="font-size:15px" /><br/><br/>
+
+        <br/><textarea autocorrect="off" style="font-size:15px; border-radius:0">bla 3</textarea><br/><br/>
+
+        <br/><div data-keyboardoptions='{"type":"default"}' id="content" onclick="window.plugins.toast.editText(this)" style="width:200px;height:50px;background-color:#ddd;text-transform:none">12345</div><br/><br/>
+
+        <br/><div data-keyboardoptions='{"type":"decimal"}' id="content2" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; border:4px solid red; font-family: Arial; width:160px; height:50px; color:#fff; background-color:#000; text-transform:none">9,95</div><br/><br/>
+
+        <br/><div data-keyboardoptions='{"type":"phone"}' id="content3" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; padding:4px; font-family: Arial; width:160px; height:50px; color:#fff; background-color:#000; text-transform:none">0650298958</div><br/><br/>
+
+        <br/><div data-keyboardoptions='{"type":"number"}' id="content4" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; margin: 4px; font-family: Arial; width:160px; height:50px; color:#fff; background-color:#000; text-transform:none">112233</div><br/><br/>
+
+        <br/><div data-keyboardoptions='{"type":"namephone"}' id="content5" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Arial; width:160px; height:50px; color:#222; background-color:#fff; text-transform:none">namephone</div><br/><br/>
+
+        <br/><div data-keyboardoptions='{"type":"numberspunc"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">numberspunc</div><br/><br/>
+
+        <br/><div data-keyboardoptions='{"type":"twitter"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">twitter</div><br/><br/>
+
+        <br/><div data-keyboardoptions='{"type":"email"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">email</div><br/><br/>
+
+        <br/><div data-keyboardoptions='{"type":"url"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">url</div><br/><br/>
+
+        <br/><div data-keyboardoptions='{"type":"alphabet"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">alphabet</div><br/><br/>
+
+        <br/><div data-keyboardoptions='{"type":"search"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">search</div><br/><br/>
+
+        <br/><div data-keyboardoptions='{"type":"ascii"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">ascii</div><br/><br/-->
+
+      <p class="event received">Device is Ready</p>
+        <br/>
+        <br/>
+        <div id="messages"></div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+      </div>
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+        <script>
+          document.addEventListener('deviceready', function() {
+            var options = {
+              placeholder: 'Message',
+              placeholderColor: "#DDDDDD",
+              backgroundColor: "#EEEEEE",
+              borderColor: "#777777",
+              maxChars: 80, // setting this > 0 will make the counter show up
+              counterStyle: 'countdownreversed', // note that 'none' still shows a counter in case maxChars is set
+              textColor: '#555555',
+              backgroundColor: '#FFFFFF',
+              scrollToBottomAfterKeyboardShows: true, // note that the webview should be scrollable, not a container-div - but you can always do this manually from JS. default false.
+              leftButton: {
+                type: 'fontawesome', // or 'text'
+                value: 'camera', // http://fontawesome.io/icons/, with or without the 'fa-' prefix
+            //        color: '#666666', // default iOS blue
+                disabledWhenTextEntered: true, // default false
+                callback: function() {
+                  alert("Camera icon pressed - showing an ActionSheet seems appropriate now.");
+                }
+              },
+              rightButton: {
+                type: 'text', // or 'fa|fontawesome'
+                value: 'Send', // default 'Send'
+            //        color: '#FF0000', // default iOS blue
+                callback: function() {
+                  // by default the keyboard will hide but the bar will remain in view after sending a message,
+                  // enable this line to also hide that bar
+            //          NativeKeyboard.hideMessenger();
+                }
+              }
+            };
+                      
+            var onSuccess = function (result) {
+              if (result.text) {
+                console.log("Text entered: " + result.text);
+                document.getElementById("messages").innerHTML = document.getElementById("messages").innerHTML + "<br/><br/>" + result.text;
+              } else if (result.keyboardDidShow === true && result.keyboardHeight) {
+                console.log("Keyboard is shown with height: " + result.keyboardHeight);
+              } else if (result.keyboardWillHide) {
+                console.log("Keyboard is hiding");
+              }
+            };
+
+            NativeKeyboard.showMessenger(options, onSuccess);
+          }, false);
+        </script>
+  </body>
+</html>
