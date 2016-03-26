@@ -8,6 +8,11 @@
 #import "UIScrollView+SLKAdditions.h"
 #import "UIView+SLKAdditions.h"
 #import "SLKUIConstants.h"
+#import "NSString+FontAwesome.h"
+#import "SLKInputAccessoryView.h"
+#import "UIImage+FontAwesome.h"
+#import "UIResponder+SLKAdditions.h"
+
 
 //! Project version number for NativeKeyboard.
 FOUNDATION_EXPORT double NativeKeyboardVersionNumber;
@@ -16,5 +21,3 @@ FOUNDATION_EXPORT double NativeKeyboardVersionNumber;
 FOUNDATION_EXPORT const unsigned char NativeKeyboardVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <NativeKeyboard/PublicHeader.h>
-
-

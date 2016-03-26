@@ -4,17 +4,13 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>FontAwesome.ttf</key>
-		<data>
-		J88fLsWa7OaTjHuy/rDih+p3j/k=
-		</data>
 		<key>Headers/NSString+FontAwesome.h</key>
 		<data>
 		gRTsSYoJAbemHCri1IiRvXQJM2U=
 		</data>
 		<key>Headers/NativeKeyboard.h</key>
 		<data>
-		HfOAapwA+O2Bs1mL4TReWBd/lSk=
+		/BJ0AB+rNTQ8xvKd7pwpTtou17k=
 		</data>
 		<key>Headers/NativeKeyboardHelper.h</key>
 		<data>
@@ -70,7 +66,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		t5zc3CNzf4W1GusZJWEO5I9OCm8=
+		64KXmy0Z+KW0ODTWYD0kRzdDocc=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -79,17 +75,13 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>FontAwesome.ttf</key>
-		<data>
-		J88fLsWa7OaTjHuy/rDih+p3j/k=
-		</data>
 		<key>Headers/NSString+FontAwesome.h</key>
 		<data>
 		gRTsSYoJAbemHCri1IiRvXQJM2U=
 		</data>
 		<key>Headers/NativeKeyboard.h</key>
 		<data>
-		HfOAapwA+O2Bs1mL4TReWBd/lSk=
+		/BJ0AB+rNTQ8xvKd7pwpTtou17k=
 		</data>
 		<key>Headers/NativeKeyboardHelper.h</key>
 		<data>

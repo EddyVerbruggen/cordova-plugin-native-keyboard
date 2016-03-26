@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-native-keyboard"
-        version="0.0.5">
+        version="0.0.7">
 
   <name>NativeKeyboard</name>
 
@@ -44,8 +44,8 @@
     <source-file src="src/ios/NKSLKTextViewController.m"/>
 
     <framework src="src/ios/lib/NativeKeyboard.framework" custom="true" />
-    
-    <!-- The font has been added by the framework, the only thing left is adding a reference -->
+
+     <resource-file src="src/ios/FontAwesome.ttf" target="FontAwesome.ttf" />
     <config-file target="*-Info.plist" parent="UIAppFonts">
       <array>
         <string>FontAwesome.ttf</string>
