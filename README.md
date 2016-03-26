@@ -18,3 +18,5 @@ cordova plugin add ../../cordova-plugin-native-keyboard/cordova-plugin-native-ke
 cp {{ path to }}/cordova-plugin-native-keyboard/demo/index.html www/
 cordova run ios
 ```
+
+Now you'll be able to play with the messenger component of this plugin. See `demo/index.html` for all the available properties.
