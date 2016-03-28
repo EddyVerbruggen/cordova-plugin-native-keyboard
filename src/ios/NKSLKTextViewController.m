@@ -4,12 +4,43 @@
 
 id <CDVCommandDelegate> _commandDelegate;
 CDVInvokedUrlCommand* _command;
-
+NSArray * _supportedOrientations;
 CGFloat _baseKeyboardHeight = 224; // fallback
 CGFloat _defaultContentHeight = 34;
 CGFloat _lastContentHeight = 34;
-
 BOOL _disableLefButtonWhenTextEntered;
+
+// copied from CDVViewController so the rotation isn't altered during/after using the SlackViewController
+#ifdef __IPHONE_9_0
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+#else
+- (NSUInteger)supportedInterfaceOrientations
+#endif
+{
+  NSUInteger ret = 0;
+  if ([self supportsOrientation:UIInterfaceOrientationPortrait]) {
+    ret = ret | (1 << UIInterfaceOrientationPortrait);
+  }
+  if ([self supportsOrientation:UIInterfaceOrientationPortraitUpsideDown]) {
+    ret = ret | (1 << UIInterfaceOrientationPortraitUpsideDown);
+  }
+  if ([self supportsOrientation:UIInterfaceOrientationLandscapeRight]) {
+    ret = ret | (1 << UIInterfaceOrientationLandscapeRight);
+  }
+  if ([self supportsOrientation:UIInterfaceOrientationLandscapeLeft]) {
+    ret = ret | (1 << UIInterfaceOrientationLandscapeLeft);
+  }
+  return ret;
+}
+
+- (BOOL)supportsOrientation:(UIInterfaceOrientation)orientation
+{
+  return [_supportedOrientations containsObject:[NSNumber numberWithInt:orientation]];
+}
+
+- (void) setSupportedInterfaceOrientations: (NSArray*) orientations {
+  _supportedOrientations = orientations;
+}
 
 - (void) updateKeyboardHeight:(CGFloat)height {
   _baseKeyboardHeight = height;
@@ -97,13 +128,13 @@ BOOL _disableLefButtonWhenTextEntered;
   if (placeholderColor != nil) {
     self.textInputbar.textView.placeholderColor = [NativeKeyboardHelper colorFromHexString:placeholderColor];
   }
-  NSString* backgroundColor = options[@"backgroundColor"];
-  if (backgroundColor != nil) {
-    self.textInputbar.textView.backgroundColor = [NativeKeyboardHelper colorFromHexString:backgroundColor];
+  NSString* textViewBackgroundColor = options[@"textViewBackgroundColor"];
+  if (textViewBackgroundColor != nil) {
+    self.textInputbar.textView.backgroundColor = [NativeKeyboardHelper colorFromHexString:textViewBackgroundColor];
   }
-  NSString* borderColor = options[@"borderColor"];
-  if (borderColor != nil) {
-    self.textInputbar.textView.layer.borderColor = [NativeKeyboardHelper colorFromHexString:borderColor].CGColor;
+  NSString* textViewBorderColor = options[@"textViewBorderColor"];
+  if (textViewBorderColor != nil) {
+    self.textInputbar.textView.layer.borderColor = [NativeKeyboardHelper colorFromHexString:textViewBorderColor].CGColor;
   }
 //  self.textInputbar.textView.pastableMediaTypes = SLKPastableMediaTypeAll;
 
@@ -114,6 +145,11 @@ BOOL _disableLefButtonWhenTextEntered;
   self.shouldScrollToBottomAfterKeyboardShows = [options[@"scrollToBottomAfterKeyboardShows"] boolValue];
   self.inverted = NO;
   
+  NSString* textViewContainerBackgroundColor = options[@"textViewContainerBackgroundColor"];
+  if (textViewContainerBackgroundColor != nil) {
+    self.textInputbar.backgroundColor = [NativeKeyboardHelper colorFromHexString:textViewContainerBackgroundColor];
+  }
+
   NSString *text = options[@"text"];
   self.textInputbar.textView.text = text;
   if (options[@"textColor"] != nil) {

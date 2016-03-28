@@ -3,6 +3,10 @@
 
 @implementation CDVNativeKeyboard
 
+// TODO: when the native textfield blurs wait 100 ms and if the code isn't in here then hide the keyboard.
+//       that should support hopping from one textfield to the other and also hide the keyboard when we're not
+//  TODO - OR: add a click listener on the body / window in JS and invoke 'hide' when it fires and the keyboard is open.. so enable that listener when 'show' is called
+
 bool DEBUG_KEYBOARD = NO;
 
 UITextView *textView;
@@ -10,6 +14,7 @@ UIToolbar *toolBar;
 NSString *_callbackId;
 double _offsetTop;
 double _lineSpacing;
+bool _textarea;
 NKSLKTextViewController *tvc;
 
 
@@ -28,7 +33,7 @@ NKSLKTextViewController *tvc;
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(keyboardWillBeHidden:)
                                                name:UIKeyboardWillHideNotification object:nil];
-  }
+}
 
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWasShown:(NSNotification*)aNotification
@@ -36,18 +41,18 @@ NKSLKTextViewController *tvc;
   NSDictionary* info = [aNotification userInfo];
   CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
   
-//  UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-//  self.webView.scrollView.contentInset = contentInsets;
-//  self.webView.scrollView.scrollIndicatorInsets = contentInsets;
+  //  UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+  //  self.webView.scrollView.contentInset = contentInsets;
+  //  self.webView.scrollView.scrollIndicatorInsets = contentInsets;
   
   // If active text field is hidden by keyboard, scroll it so it's visible
   // Your app might not need or want this behavior.
-//  CGRect aRect = self.webView.frame;
+  //  CGRect aRect = self.webView.frame;
   CGFloat kbHeight = kbSize.height;
-//  aRect.size.height -= kbHeight;
-//  if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
-//    [self.webView.scrollView scrollRectToVisible:activeField.frame animated:YES];
-//  }
+  //  aRect.size.height -= kbHeight;
+  //  if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
+  //    [self.webView.scrollView scrollRectToVisible:activeField.frame animated:YES];
+  //  }
   
   if (tvc != nil) {
     [tvc updateKeyboardHeight:kbHeight];
@@ -57,9 +62,9 @@ NKSLKTextViewController *tvc;
 // Called when the UIKeyboardWillHideNotification is sent
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
-//  UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-//  self.webView.scrollView.contentInset = contentInsets;
-//  self.webView.scrollView.scrollIndicatorInsets = contentInsets;
+  //  UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+  //  self.webView.scrollView.contentInset = contentInsets;
+  //  self.webView.scrollView.scrollIndicatorInsets = contentInsets;
 }
 
 - (void)pluginInitialize
@@ -67,7 +72,7 @@ NKSLKTextViewController *tvc;
   [self registerForKeyboardNotifications];
   
   textView = [[UITextView alloc] init];
-
+  
   //    textView.layoutManager.delegate = self;
   toolBar = [[UIToolbar alloc] init];
   
@@ -98,8 +103,14 @@ NKSLKTextViewController *tvc;
     tvc = [[NKSLKTextViewController alloc] initWithScrollView:self.webView.scrollView
                                                   withCommand:command
                                            andCommandDelegate:self.commandDelegate];
+    
+    NSArray * ors = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
+    NSArray * suppOrientations = [((CDVViewController*)self.viewController) parseInterfaceOrientations:ors];
+    [tvc setSupportedInterfaceOrientations:suppOrientations];
+    
+    // if a backgroundcolor is passed in use that, otherwise use the webview bgcolor
+    tvc.view.backgroundColor = self.webView.backgroundColor;
     [self.viewController.view.window setRootViewController:tvc];
-//    [self.viewController.view.window makeKeyAndVisible];
   }
 }
 
@@ -109,13 +120,24 @@ NKSLKTextViewController *tvc;
   }
 }
 
+
+/*
+ It's a bit hard to find a thing that can run in the background here since it's mainly UI stuff.
+ But if we do, we can use:
+ [self.commandDelegate runInBackground:^{
+   // and to have something in there run on the main thread (the UI stuff):
+   dispatch_async(dispatch_get_main_queue(), ^{
+   })
+ }];
+*/
 - (void)show:(CDVInvokedUrlCommand*)command {
   NSDictionary* options = [command argumentAtIndex:0];
   
-  allowHide = NO;
-  
+  _keyboardShouldClose = NO;
+  [textView setHidden:NO];
+
   // TODO
-//  textView.returnKeyType = UIReturnKeyJoin;
+  //  textView.returnKeyType = UIReturnKeyJoin;
   
   _offsetTop = [options[@"offsetTop"] doubleValue];
   
@@ -127,14 +149,15 @@ NKSLKTextViewController *tvc;
       [textView setKeyboardType:keyBoardType];
     }
   }
-
+  _textarea = [@"textarea" isEqualToString:options[@"type"]];
+  
   // TODO pass in these preferences (based on html5 tag autocorrect=false)
   [textView setSpellCheckingType:UITextSpellCheckingTypeNo];
   [textView setAutocorrectionType:UITextAutocorrectionTypeNo];
   
   // nice candidate for the paid version
   [textView setKeyboardAppearance:UIKeyboardAppearanceDefault];
-
+  
   double phoneHeight = screenBounds.size.height;
   double keyboardHeight = 230;
   
@@ -193,45 +216,45 @@ NKSLKTextViewController *tvc;
       toolBar.translucent = YES;
       [toolBar setItems:buttons];
       textView.inputAccessoryView = toolBar;
-//      toolBar.tintColor = [UIColor orangeColor]; // TODO pass in
+      //      toolBar.tintColor = [UIColor orangeColor]; // TODO pass in
     } else {
       textView.inputAccessoryView = nil;
     }
   }
   
   NSDictionary *padding = options[@"padding"];
-//  double paddingTop = [padding[@"top"] doubleValue];
+  //  double paddingTop = [padding[@"top"] doubleValue];
   double paddingLeft = [padding[@"left"] doubleValue];
-//  double paddingBottom = [padding[@"bottom"] doubleValue];
-//  double paddingRight = [padding[@"right"] doubleValue];
+  //  double paddingBottom = [padding[@"bottom"] doubleValue];
+  //  double paddingRight = [padding[@"right"] doubleValue];
   // TODO for a textarea the padding is not correct
   //textView.textContainerInset = UIEdgeInsetsMake(paddingTop, paddingLeft, paddingBottom, paddingRight);
   textView.textContainerInset = UIEdgeInsetsZero;
-//  textView.textContainerInset = UIEdgeInsetsMake(6, 0, 0, 0);
+  //  textView.textContainerInset = UIEdgeInsetsMake(6, 0, 0, 0);
   
-
+  
   
   
   NSDictionary *margin = options[@"margin"];
   double marginTop = [margin[@"top"] doubleValue];
   double marginLeft = [margin[@"left"] doubleValue];
-//  double marginBottom = [margin[@"bottom"] doubleValue];
-//  double marginRight = [margin[@"right"] doubleValue];
+  //  double marginBottom = [margin[@"bottom"] doubleValue];
+  //  double marginRight = [margin[@"right"] doubleValue];
   
   // TODO using this doesn't seem correct..
   // ........... but let's first throw it in an ionic starter
-//  double borderRadius = [options[@"borderRadius"] doubleValue];
+  //  double borderRadius = [options[@"borderRadius"] doubleValue];
   
   NSDictionary *border = options[@"border"];
   double borderLeft = [border[@"left"] doubleValue];
   double borderTop = [border[@"top"] doubleValue];
-//  double borderBottom = [border[@"bottom"] doubleValue];
-//  double borderRight = [border[@"right"] doubleValue];
+  //  double borderBottom = [border[@"bottom"] doubleValue];
+  //  double borderRight = [border[@"right"] doubleValue];
   
-//  double verticalAlignMiddleCompensation = 6;
-
-//  [textView setContentInset:UIEdgeInsetsMake(topCorrect,0,0,0)];
-
+  //  double verticalAlignMiddleCompensation = 6;
+  
+  //  [textView setContentInset:UIEdgeInsetsMake(topCorrect,0,0,0)];
+  
   NSDictionary *box = options[@"box"];
   double left = [box[@"left"] doubleValue] + borderLeft + paddingLeft - marginLeft;
   double top = [box[@"top"] doubleValue] + borderTop + marginTop;
@@ -265,7 +288,7 @@ NKSLKTextViewController *tvc;
     uiFont = [UIFont systemFontOfSize:fontSize];
   }
   
-  //    uiFont = [NativeKeyboard fontWithName:fontFamily sizeInPixels:fontSize*1.26];
+//  uiFont = [NativeKeyboard fontWithName:fontFamily sizeInPixels:fontSize*1.26];
   
   // adjust the scrollposition if needed
   if (top > setOriginYto) {
@@ -292,8 +315,10 @@ NKSLKTextViewController *tvc;
     self.webView.scrollView.delegate = self;
   }
   
-  NSString *caretColor = options[@"caretColor"]; // TODO add an if
-  [[UITextView appearance] setTintColor:[NativeKeyboardHelper colorFromHexString:caretColor]];
+  NSString *caretColor = options[@"caretColor"];
+  if (caretColor != nil) {
+    [[UITextView appearance] setTintColor:[NativeKeyboardHelper colorFromHexString:caretColor]];
+  }
   
   NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
   double lineHeight = [options[@"lineHeight"] doubleValue];
@@ -319,7 +344,6 @@ NKSLKTextViewController *tvc;
     textView.frame = CGRectMake(left, textView.frame.origin.y + verticalAlignMiddleCompensation, width, height - verticalAlignMiddleCompensation);
   }
   
-
   //NSURL *htmlString = [[NSBundle mainBundle]  URLForResource: @"string"     withExtension:@"html"];
   
   //  NSString *html = @"<html>\
@@ -536,53 +560,61 @@ NKSLKTextViewController *tvc;
 - (void) doneWriting:(id)x {
 }
 
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+BOOL _keyboardShouldClose;
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView { // 1 ([self close] is called after this, before (2)
+  if (!_keyboardShouldClose) {
+    [self close:textView];
+  }
+  return _keyboardShouldClose;
+ // !!!!!!!!!! by setting this to NO you can keep the keyboard on open
+}
+
+
+- (void) textViewDidEndEditing:(UITextView *)textView { // 2
+  _keyboardShouldClose = YES;
+}
+
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView { // 3
   return YES;
 }
 
-BOOL allowHide = NO;
-- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
-  if (allowHide) {
-    [self close:textView];
-  }
-  return allowHide; // by setting this to NO you can keep the keyboard on open
+- (void)textViewDidBeginEditing:(UITextView *)textView { // 4  int i=0;
 }
 
 - (void) buttonTapped:(UIBarButtonItem*)button {
   // if we send this index back to JS then it knows the index'd passed in item has been tapped
+  _keyboardShouldClose = YES;
+  [textView endEditing:YES];
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"buttonIndex":@(button.tag)}];
   pluginResult.keepCallback = [NSNumber numberWithBool:YES];
   [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
   // TODO would be cool if we can pass this preference in - perhaps use a category on UIBarButtonItem ?
-  if (allowHide) {
-    [textView endEditing:YES];
-  }
+//  if (allowHide) {
+//  }
 }
 
 - (void)hide:(CDVInvokedUrlCommand*)command {
   if (textView != nil) {
-    allowHide = YES;
     [textView endEditing:YES];
   }
 }
 
 - (void) close:(id)type {
-  [textView removeFromSuperview];
+//  [textView removeFromSuperview];
+  [textView setHidden:YES];
   [self.webView.scrollView setScrollEnabled:YES];
   self.webView.scrollView.delegate = nil;
   
-  // restore the scroll position
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 40 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
-    [self.webView.scrollView setContentOffset: CGPointMake(0, _offsetTop) animated:YES];
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1000 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+    if (_keyboardShouldClose) {
+      [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
+
+      // restore the scroll position
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 50 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+        [self.webView.scrollView setContentOffset: CGPointMake(0, _offsetTop) animated:YES];
+      });
+    }
   });
-}
-
-- (void)textViewDidBeginEditing:(UITextView *)textView {
-//  int i=0;
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView {
-//  int i=0;
 }
 
 // updated with the added text after every keypress (or empty string if backspace)
@@ -608,7 +640,14 @@ BOOL allowHide = NO;
   NSLog(@"textViewDidChange: %@", text);
   // need to escape these to be able to pass to the webview
   if ([text isEqualToString:@"\n"]) {
-    text = @"\\n";
+    if (_textarea) {
+      text = @"\\n";
+    } else {
+      // end editing
+      _keyboardShouldClose = YES;
+      [textView endEditing:YES];
+      return;
+    }
   }
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"text":text}];
   pluginResult.keepCallback = [NSNumber numberWithBool:YES];

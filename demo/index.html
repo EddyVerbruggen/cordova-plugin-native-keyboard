@@ -62,13 +62,14 @@
             var options = {
               placeholder: 'Message',
               placeholderColor: "#DDDDDD",
-              backgroundColor: "#EEEEEE",
-              borderColor: "#777777",
+              textViewBackgroundColor: "#F6F6F6",
+              textViewContainerBackgroundColor: "#DDDDDD",
+              textViewBorderColor: "#777777",
               maxChars: 80, // setting this > 0 will make the counter show up
               counterStyle: 'countdownreversed', // note that 'none' still shows a counter in case maxChars is set
               textColor: '#555555',
               backgroundColor: '#FFFFFF',
-              scrollToBottomAfterKeyboardShows: true, // note that the webview should be scrollable, not a container-div - but you can always do this manually from JS. default false.
+              scrollToBottomAfterKeyboardShows: false, // note that the webview should be scrollable, not a container-div - but you can always do this manually from JS. default false.
               leftButton: {
                 type: 'fontawesome', // or 'text'
                 value: 'camera', // http://fontawesome.io/icons/, with or without the 'fa-' prefix
