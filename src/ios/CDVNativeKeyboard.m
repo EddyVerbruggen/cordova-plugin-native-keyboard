@@ -99,7 +99,7 @@ NKSLKTextViewController *tvc;
   if (tvc != nil) {
     [tvc setTextInputbarHidden:NO animated:YES];
     [tvc updateWithCommand:command andCommandDelegate:self.commandDelegate];
-  } else {
+  } else {    
     tvc = [[NKSLKTextViewController alloc] initWithScrollView:self.webView.scrollView
                                                   withCommand:command
                                            andCommandDelegate:self.commandDelegate];
@@ -578,7 +578,7 @@ BOOL _keyboardShouldClose;
   return YES;
 }
 
-- (void)textViewDidBeginEditing:(UITextView *)textView { // 4  int i=0;
+- (void)textViewDidBeginEditing:(UITextView *)textView { // 4
 }
 
 - (void) buttonTapped:(UIBarButtonItem*)button {

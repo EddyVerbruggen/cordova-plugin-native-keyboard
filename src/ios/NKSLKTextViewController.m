@@ -64,7 +64,7 @@ BOOL _disableLefButtonWhenTextEntered;
 - (void)textDidUpdate:(BOOL)animated {
   // Notifies the view controller that the text did update.
   [super textDidUpdate:animated];
-
+  
   if (_disableLefButtonWhenTextEntered) {
     [self.leftButton setEnabled:self.textView.text.length == 0];
   }
@@ -77,7 +77,7 @@ BOOL _disableLefButtonWhenTextEntered;
   }
   if (height != _lastContentHeight) {
     CGFloat diff = height - _defaultContentHeight;
-//    [self.scrollView setContentOffset: CGPointMake(0, 400) animated:YES];
+    //    [self.scrollView setContentOffset: CGPointMake(0, 400) animated:YES];
     
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"contentHeight":[NSNumber numberWithFloat:height], @"contentHeightDiff":[NSNumber numberWithFloat:diff]}];
     pluginResult.keepCallback = [NSNumber numberWithBool:YES];
@@ -136,9 +136,9 @@ BOOL _disableLefButtonWhenTextEntered;
   if (textViewBorderColor != nil) {
     self.textInputbar.textView.layer.borderColor = [NativeKeyboardHelper colorFromHexString:textViewBorderColor].CGColor;
   }
-//  self.textInputbar.textView.pastableMediaTypes = SLKPastableMediaTypeAll;
-
-//  [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
+  //  self.textInputbar.textView.pastableMediaTypes = SLKPastableMediaTypeAll;
+  
+  //  [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
   self.bounces = YES;
   self.shakeToClearEnabled = NO;
   self.keyboardPanningEnabled = YES;
@@ -149,13 +149,13 @@ BOOL _disableLefButtonWhenTextEntered;
   if (textViewContainerBackgroundColor != nil) {
     self.textInputbar.backgroundColor = [NativeKeyboardHelper colorFromHexString:textViewContainerBackgroundColor];
   }
-
+  
   NSString *text = options[@"text"];
   self.textInputbar.textView.text = text;
   if (options[@"textColor"] != nil) {
     self.textInputbar.textView.textColor = [NativeKeyboardHelper colorFromHexString:options[@"textColor"]];
   }
-
+  
   // TODO feature-allowed check
   SLKCounterStyle slkCounterStyle = [NKSLKTextViewController getSLKCounterStyle:options[@"counterStyle"]];
   self.textInputbar.counterStyle = slkCounterStyle;
@@ -169,13 +169,13 @@ BOOL _disableLefButtonWhenTextEntered;
     }
   }
   
-
-//  [self.textInputbar.textView setKeyboardType:UIKeyboardTypePhonePad];
-
+  
+  //  [self.textInputbar.textView setKeyboardType:UIKeyboardTypePhonePad];
+  
   if ([options[@"showKeyboard"] boolValue]) {
     [self presentKeyboard:YES];
   }
-
+  
   NSDictionary *leftButton = options[@"leftButton"];
   if (leftButton != nil) {
     _disableLefButtonWhenTextEntered = [leftButton[@"disabledWhenTextEntered"] boolValue];
@@ -184,7 +184,7 @@ BOOL _disableLefButtonWhenTextEntered;
       [NativeKeyboardHelper setFAImage:leftButton[@"value"] onButton:self.leftButton withColor:leftButton[@"color"]];
     }
   }
-
+  
   // change the label and color of the send button
   NSDictionary* rightButton = options[@"rightButton"];
   if (rightButton != nil) {

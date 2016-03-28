@@ -15,7 +15,7 @@
       <div id="deviceready" class="blink">
         <p class="event listening">Connecting to Device</p>
         
-        <!--br/><input type="text" value="bla 1" autocorrect="off" style="font-size:15px" /><br/><br/>
+        <br/><input type="text" value="bla 1" autocorrect="off" style="font-size:15px" /><br/><br/>
         
         <br/><input type="text" value="bla 2" autocorrect="on" style="font-size:15px" /><br/><br/>
 
@@ -43,10 +43,12 @@
 
         <br/><div data-keyboardoptions='{"type":"search"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">search</div><br/><br/>
 
-        <br/><div data-keyboardoptions='{"type":"ascii"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">ascii</div><br/><br/-->
+        <br/><div data-keyboardoptions='{"type":"ascii"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">ascii</div><br/><br/>
 
       <p class="event received">Device is Ready</p>
         <br/>
+        <button onclick="showMessenger()">show messenger</button>
+        <button onclick="NativeKeyboard.hideMessenger()">hide messenger</button>
         <br/>
         <div id="messages">First<br/><br/>Second<br/><br/>Third</div>
         <br/>
@@ -58,7 +60,8 @@
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
         <script>
-          document.addEventListener('deviceready', function() {
+//          document.addEventListener('deviceready', showMessenger, false);
+          function showMessenger() {
             var options = {
               placeholder: 'Message',
               placeholderColor: "#DDDDDD",
@@ -103,7 +106,7 @@
             };
 
             NativeKeyboard.showMessenger(options, onSuccess);
-          }, false);
+          };
         </script>
   </body>
 </html>
