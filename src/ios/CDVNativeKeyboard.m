@@ -3,18 +3,15 @@
 
 @implementation CDVNativeKeyboard
 
-// TODO: when the native textfield blurs wait 100 ms and if the code isn't in here then hide the keyboard.
-//       that should support hopping from one textfield to the other and also hide the keyboard when we're not
-//  TODO - OR: add a click listener on the body / window in JS and invoke 'hide' when it fires and the keyboard is open.. so enable that listener when 'show' is called
-
 bool DEBUG_KEYBOARD = NO;
 
-UITextView *textView;
+//UITextView *textView;
 UIToolbar *toolBar;
 NSString *_callbackId;
 double _offsetTop;
 double _lineSpacing;
 bool _textarea;
+int _maxlength;
 NKSLKTextViewController *tvc;
 
 
@@ -24,6 +21,7 @@ NKSLKTextViewController *tvc;
 //               action:@selector(textFieldDidChange:)
 //     forControlEvents:UIControlEventEditingChanged];
 
+// note that we only need these for the messenger component
 - (void)registerForKeyboardNotifications
 {
   [[NSNotificationCenter defaultCenter] addObserver:self
@@ -71,25 +69,27 @@ NKSLKTextViewController *tvc;
 {
   [self registerForKeyboardNotifications];
   
-  textView = [[UITextView alloc] init];
+  self.textView = [[UITextView alloc] init];
   
   //    textView.layoutManager.delegate = self;
   toolBar = [[UIToolbar alloc] init];
   
   if (DEBUG_KEYBOARD) {
-    textView.textColor = [UIColor greenColor];
-    textView.backgroundColor = [UIColor lightGrayColor];
-    textView.alpha = 0.5;
+    self.textView.textColor = [UIColor greenColor];
+    self.textView.backgroundColor = [UIColor lightGrayColor];
+    self.textView.alpha = 0.5;
   } else {
-    textView.backgroundColor = [UIColor clearColor];
+    self.textView.backgroundColor = [UIColor clearColor];
   }
   
-  textView.delegate = self;
+  // we don't want these
+  [self.textView setSpellCheckingType:UITextSpellCheckingTypeNo];
+  [self.textView setAutocorrectionType:UITextAutocorrectionTypeNo];
+  self.textView.delegate = self;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-  // this is the default btw, so we might as well remove this method
-  [scrollView setContentOffset: CGPointZero];
+  // this event is triggered implicitly by our code, so override the default impl which scrolls back to top
 }
 
 - (void)showMessenger:(CDVInvokedUrlCommand*)command {
@@ -99,7 +99,7 @@ NKSLKTextViewController *tvc;
   if (tvc != nil) {
     [tvc setTextInputbarHidden:NO animated:YES];
     [tvc updateWithCommand:command andCommandDelegate:self.commandDelegate];
-  } else {    
+  } else {
     tvc = [[NKSLKTextViewController alloc] initWithScrollView:self.webView.scrollView
                                                   withCommand:command
                                            andCommandDelegate:self.commandDelegate];
@@ -120,24 +120,20 @@ NKSLKTextViewController *tvc;
   }
 }
 
-
 /*
  It's a bit hard to find a thing that can run in the background here since it's mainly UI stuff.
  But if we do, we can use:
  [self.commandDelegate runInBackground:^{
-   // and to have something in there run on the main thread (the UI stuff):
-   dispatch_async(dispatch_get_main_queue(), ^{
-   })
+ // and to have something in there run on the main thread (the UI stuff):
+ dispatch_async(dispatch_get_main_queue(), ^{
+ })
  }];
-*/
+ */
 - (void)show:(CDVInvokedUrlCommand*)command {
   NSDictionary* options = [command argumentAtIndex:0];
   
-  _keyboardShouldClose = NO;
-  [textView setHidden:NO];
-
-  // TODO
-  //  textView.returnKeyType = UIReturnKeyJoin;
+  allowClose = NO;
+  [self.textView setHidden:NO];
   
   _offsetTop = [options[@"offsetTop"] doubleValue];
   
@@ -146,27 +142,35 @@ NKSLKTextViewController *tvc;
   if (options[@"type"] != nil) {
     if ([NativeKeyboardHelper allowFeature:NKFeatureKeyboardType]) {
       UIKeyboardType keyBoardType = [NativeKeyboardHelper getUIKeyboardType:options[@"type"]];
-      [textView setKeyboardType:keyBoardType];
+      [self.textView setKeyboardType:keyBoardType];
     }
   }
   _textarea = [@"textarea" isEqualToString:options[@"type"]];
+
   
-  // TODO pass in these preferences (based on html5 tag autocorrect=false)
-  [textView setSpellCheckingType:UITextSpellCheckingTypeNo];
-  [textView setAutocorrectionType:UITextAutocorrectionTypeNo];
+  NSString *returnKeyType = nil;
+  NSDictionary *returnKeyOptions = options[@"returnKey"];
+  if (returnKeyOptions != nil) {
+    returnKeyType = returnKeyOptions[@"type"];
+  }
+  if (returnKeyType == nil) {
+    if (!_textarea) {
+      // change the default of an input text field to 'done' (instead of 'return')
+      returnKeyType = @"done";
+    }
+  }
+  [self.textView setReturnKeyType:[NativeKeyboardHelper getUIReturnKeyType:returnKeyType]];
   
-  // nice candidate for the paid version
-  [textView setKeyboardAppearance:UIKeyboardAppearanceDefault];
+  [self.textView setKeyboardAppearance:[NativeKeyboardHelper getUIKeyboardAppearance:options[@"appearance"]]];
   
   double phoneHeight = screenBounds.size.height;
-  double keyboardHeight = 230;
+  double keyboardHeight = 240;
   
-  // TODO done vs trash, etc - pass in from webview
   NSDictionary *accessorybar = options[@"accessorybar"];
   if (accessorybar == nil) {
-    textView.inputAccessoryView = nil;
+    self.textView.inputAccessoryView = nil;
   } else {
-    int toolbarHeight = 44; // TODO depends on what's passed in, this is the default
+    int toolbarHeight = 44;
     keyboardHeight += toolbarHeight;
     
     toolBar.frame = CGRectMake(0, 0, screenBounds.size.width, toolbarHeight);
@@ -182,16 +186,21 @@ NKSLKTextViewController *tvc;
         continue;
       }
       if ([btnType isEqualToString:@"system"]) {
-        button = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:[self getUIBarButtonSystemItem:btnValue]
+        button = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:[NativeKeyboardHelper getUIBarButtonSystemItem:btnValue]
                                                                target:self
                                                                action:@selector(buttonTapped:)];
       } else if ([btnType isEqualToString:@"text"]) {
         button = [[UIBarButtonItem alloc] initWithTitle:btnValue
-                                                  style:[self getUIBarButtonItemStyle:btn[@"style"]]
+                                                  style:[NativeKeyboardHelper getUIBarButtonItemStyle:btn[@"style"]]
                                                  target:self
                                                  action:@selector(buttonTapped:)];
       } else if ([btnType isEqualToString:@"fa"] || [btnType isEqualToString:@"fontawesome"]) {
-        UIImage* image = [NativeKeyboardHelper getFAImage:btnValue];
+        UIImage* image;
+        if (btn[@"fontSize"] == nil) {
+          image = [NativeKeyboardHelper getFAImage:btnValue];
+        } else {
+          image = [NativeKeyboardHelper getFAImage:btnValue withFontSize:[btn[@"fontSize"] intValue]];
+        }
         if (image != nil) {
           button = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonTapped:)];
         }
@@ -205,23 +214,31 @@ NKSLKTextViewController *tvc;
         NSString *color = btn[@"color"];
         if (color != nil) {
           // TODO this only seems to work the first time.. then toolBar.tintColor wins.. TRY ON REAL DEVICE? or we need to move this all the way down - or the entiry accbar stuff
-          button.tintColor = [NativeKeyboardHelper colorFromHexString:color];
+//          button.tintColor = [NativeKeyboardHelper colorFromHexString:color];
         }
         [buttons addObject:button];
       }
     }
     
     if (buttons.count > 0) {
-      toolBar.barStyle = UIBarStyleDefault;
-      toolBar.translucent = YES;
+      [NativeKeyboardHelper setUIBarStyle:accessorybar[@"style"] forToolbar:toolBar];
       [toolBar setItems:buttons];
-      textView.inputAccessoryView = toolBar;
-      //      toolBar.tintColor = [UIColor orangeColor]; // TODO pass in
+      self.textView.inputAccessoryView = toolBar;
+      toolBar.tintColor = [NativeKeyboardHelper colorFromHexString:accessorybar[@"color"]];
     } else {
-      textView.inputAccessoryView = nil;
+      self.textView.inputAccessoryView = nil;
     }
   }
   
+  if (_textarea) {
+    self.textView.textContainer.maximumNumberOfLines = 0; // no limit, which is not correct perse
+  } else {
+    self.textView.textContainer.maximumNumberOfLines = 1;
+  }
+
+  // used elsewhere
+  _maxlength = [options[@"maxlength"] intValue];
+
   NSDictionary *padding = options[@"padding"];
   //  double paddingTop = [padding[@"top"] doubleValue];
   double paddingLeft = [padding[@"left"] doubleValue];
@@ -229,15 +246,15 @@ NKSLKTextViewController *tvc;
   //  double paddingRight = [padding[@"right"] doubleValue];
   // TODO for a textarea the padding is not correct
   //textView.textContainerInset = UIEdgeInsetsMake(paddingTop, paddingLeft, paddingBottom, paddingRight);
-  textView.textContainerInset = UIEdgeInsetsZero;
-  //  textView.textContainerInset = UIEdgeInsetsMake(6, 0, 0, 0);
-  
-  
-  
+  if (_textarea) {
+    self.textView.textContainerInset = UIEdgeInsetsMake(0, 3, 0, 0);
+  } else {
+    self.textView.textContainerInset = UIEdgeInsetsZero;
+  }
   
   NSDictionary *margin = options[@"margin"];
   double marginTop = [margin[@"top"] doubleValue];
-  double marginLeft = [margin[@"left"] doubleValue];
+//  double marginLeft = [margin[@"left"] doubleValue];
   //  double marginBottom = [margin[@"bottom"] doubleValue];
   //  double marginRight = [margin[@"right"] doubleValue];
   
@@ -256,46 +273,34 @@ NKSLKTextViewController *tvc;
   //  [textView setContentInset:UIEdgeInsetsMake(topCorrect,0,0,0)];
   
   NSDictionary *box = options[@"box"];
-  double left = [box[@"left"] doubleValue] + borderLeft + paddingLeft - marginLeft;
+  double left = [box[@"left"] doubleValue] + borderLeft + paddingLeft; // - marginLeft;
   double top = [box[@"top"] doubleValue] + borderTop + marginTop;
   double width = [box[@"width"] doubleValue] - 8; // TODO
   double height = [box[@"height"] doubleValue];
   
   double setOriginYto = phoneHeight - keyboardHeight - height;
   
-  textView.frame = CGRectMake(left, top > setOriginYto ? setOriginYto : top, width, height);
+  self.textView.frame = CGRectMake(left, top > setOriginYto ? setOriginYto : top, width, height);
   
-  NSDictionary *font = options[@"font"];
-  double fontSize = [font[@"size"] doubleValue];
-  NSArray *fontFamilies = [font[@"family"] componentsSeparatedByString:@","];
+  NSString *font = options[@"font"];
+//  double fontSize = [font[@"size"] doubleValue];
+//  NSArray *fontFamilies = [font[@"family"] componentsSeparatedByString:@","];
   
-  // TODO font
-  UIFont *uiFont = nil;
-  for (int i = 0; i < (int)fontFamilies.count; i++) {
-    NSString* fontFamily = [fontFamilies[i] stringByReplacingOccurrencesOfString:@"'" withString:@""];
-    // TODO there's also -apple-system-something-else..
-    if ([fontFamily isEqualToString:@"-apple-system"]) {
-      uiFont = [UIFont systemFontOfSize:fontSize];
-    } else {
-      uiFont = [UIFont fontWithName:fontFamily size:fontSize];
-    }
-    if (uiFont != nil) {
-      break;
-    }
-  }
-  // fall back to this, otherwise the app will crash
-  if (uiFont == nil) {
-    uiFont = [UIFont systemFontOfSize:fontSize];
-  }
-  
-//  uiFont = [NativeKeyboard fontWithName:fontFamily sizeInPixels:fontSize*1.26];
+  UIFont *uiFont = [FontResolver fontWithDescription:font];
   
   // adjust the scrollposition if needed
   if (top > setOriginYto) {
     if (!DEBUG_KEYBOARD) {
       // set this to 0 to hide the caret initially
-      textView.alpha = 0;
+      self.textView.alpha = 0;
     }
+    // in case we were already editing, but now hopping to a field lower on the screen
+    // enable scrolling and hide the caret for a sec
+    if (!self.webView.scrollView.isScrollEnabled) {
+      [self.webView.scrollView setScrollEnabled:YES];
+      self.textView.alpha = 0;
+    }
+
     [self.webView.scrollView setContentOffset: CGPointMake(0, (top-setOriginYto)+_offsetTop) animated:YES];
     
     // do this to early and things will crash
@@ -307,7 +312,7 @@ NKSLKTextViewController *tvc;
     // now show the caret
     if (!DEBUG_KEYBOARD) {
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 300 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
-        textView.alpha = 1;
+        self.textView.alpha = 1;
       });
     }
   } else {
@@ -317,93 +322,51 @@ NKSLKTextViewController *tvc;
   
   NSString *caretColor = options[@"caretColor"];
   if (caretColor != nil) {
-    [[UITextView appearance] setTintColor:[NativeKeyboardHelper colorFromHexString:caretColor]];
+    [self.textView setTintColor:[NativeKeyboardHelper colorFromHexString:caretColor]];
   }
   
   NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
   double lineHeight = [options[@"lineHeight"] doubleValue];
   
   NSString *align = options[@"textAlign"];
-  paragraphStyle.alignment = [self getNSTextAlignment:align];
+  paragraphStyle.alignment = [NativeKeyboardHelper getNSTextAlignment:align];
   paragraphStyle.minimumLineHeight = lineHeight;
   paragraphStyle.maximumLineHeight = lineHeight;
-  paragraphStyle.lineSpacing = lineHeight / 7.3;
+  paragraphStyle.lineSpacing = lineHeight / 7.3; // it would be very nice to get rid of this magic number
   //  paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
-  // there are many more attrs, e.g NSFontAttributeName
   NSDictionary *attrsDictionary = @{
                                     NSFontAttributeName: uiFont,
                                     NSParagraphStyleAttributeName: paragraphStyle
                                     };
   
   NSString *text = options[@"text"];
-  textView.textContainer.lineFragmentPadding = 0;
-  textView.attributedText = [[NSAttributedString alloc] initWithString:text attributes:attrsDictionary];
+  self.textView.textContainer.lineFragmentPadding = 0;
+  self.textView.attributedText = [[NSAttributedString alloc] initWithString:text attributes:attrsDictionary];
   
-  if (![options[@"type"] isEqualToString:@"textarea"]) {
-    double verticalAlignMiddleCompensation = ([box[@"height"] doubleValue] - [textView contentSize].height * [textView zoomScale])/2.0;
-    textView.frame = CGRectMake(left, textView.frame.origin.y + verticalAlignMiddleCompensation, width, height - verticalAlignMiddleCompensation);
+  if (!_textarea) {
+    double verticalAlignMiddleCompensation = ([box[@"height"] doubleValue] - [self.textView contentSize].height * [self.textView zoomScale])/2.0;
+    self.textView.frame = CGRectMake(left, self.textView.frame.origin.y + verticalAlignMiddleCompensation, width, height - verticalAlignMiddleCompensation);
   }
   
-  //NSURL *htmlString = [[NSBundle mainBundle]  URLForResource: @"string"     withExtension:@"html"];
-  
-  //  NSString *html = @"<html>\
-  <head>\
-  <style type=\"text/css\">\
-  html, body {\
-  width: 100%;\
-  height: 100%;\
-  }\
-  input {\
-  font-family: \"-apple-system\", \"Helvetica Neue\", \"Roboto\", \"Segoe UI\", sans-serif;\
-  width: 100%;\
-  display: block;\
-  padding-top: 2px;\
-  padding-left: 0;\
-  height: 34px;\
-  color: #111;\
-  vertical-align: middle;\
-  font-size: 14px;\
-  line-height: 16px;\
-  padding-right: 24px;\
-  background-color: yellow\
-  }\
-  </style>\
-  </head>\
-  <body>\
-  <input type=\"text\" value=\"This is the text\"/>\
-  </body>\
-  </html>";
-  
-  //  NSData* data = [html dataUsingEncoding:NSUTF8StringEncoding];
-  //  NSAttributedString *stringWithHTMLAttributes = [[NSAttributedString alloc] initWithData:data
-  // options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType} documentAttributes:nil error:nil];
-  //  textView.attributedText = stringWithHTMLAttributes; // attributedText field!
-  
-  if (textView.superview == nil) {
-    [self.viewController.view addSubview: textView];
+  if (self.textView.superview == nil) {
+    [self.viewController.view addSubview: self.textView];
   } else {
   }
   if (!DEBUG_KEYBOARD) {
-    textView.textColor = [UIColor clearColor];
+    self.textView.textColor = [UIColor clearColor];
   } else {
     //    textView.textColor = [UIColor greenColor];
   }
   
-  [textView reloadInputViews];
+  [self.textView reloadInputViews];
   
-  [textView becomeFirstResponder];
+  [self.textView becomeFirstResponder];
   
   _callbackId = command.callbackId;
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
   pluginResult.keepCallback = [NSNumber numberWithBool:YES];
   [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
 }
-
-/*
- - (CGFloat)layoutManager:(NSLayoutManager *)layoutManager lineSpacingAfterGlyphAtIndex:(NSUInteger)glyphIndex withProposedLineFragmentRect:(CGRect)rect {
- return _lineSpacing;
- }
- */
 
 - (void)textFieldDidChange:(NSNotification *)notification {
   //    UITextField *textField = (UITextField*)notification;
@@ -412,166 +375,15 @@ NKSLKTextViewController *tvc;
   //  [self.webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"cordova.plugins.Keyboard.updateInput({'text': '%@'})", text]];
 }
 
-- (NSTextAlignment) getNSTextAlignment:(NSString*)type {
-  if (type == nil) {
-    return NSTextAlignmentLeft;
-  }
-  type = type.lowercaseString;
-  if ([type isEqualToString:@"center"]) {
-    return NSTextAlignmentCenter;
-  } else {
-    return NSTextAlignmentLeft;
-  }
-}
-
-- (UIBarButtonItemStyle) getUIBarButtonItemStyle:(NSString*)style {
-  if (style == nil) {
-    return UIBarButtonItemStylePlain;
-  }
-  style = style.lowercaseString;
-  if ([style isEqualToString:@"done"]) {
-    return UIBarButtonItemStyleDone;
-  } else {
-    return UIBarButtonItemStylePlain;
-  }
-}
-
-- (UIBarButtonSystemItem) getUIBarButtonSystemItem:(NSString*)type {
-  if (type == nil) {
-    return -1;
-  }
-  type = type.lowercaseString;
-  if ([type isEqualToString:@"done"]) {
-    return UIBarButtonSystemItemDone;
-  } else if ([type isEqualToString:@"cancel"]) {
-    return UIBarButtonSystemItemCancel;
-  } else if ([type isEqualToString:@"edit"]) {
-    return UIBarButtonSystemItemEdit;
-  } else if ([type isEqualToString:@"save"]) {
-    return UIBarButtonSystemItemSave;
-  } else if ([type isEqualToString:@"add"]) {
-    return UIBarButtonSystemItemAdd;
-  } else if ([type isEqualToString:@"flexiblespace"]) {
-    return UIBarButtonSystemItemFlexibleSpace;
-  } else if ([type isEqualToString:@"fixedspace"]) {
-    return UIBarButtonSystemItemFixedSpace;
-  } else if ([type isEqualToString:@"compose"]) {
-    return UIBarButtonSystemItemCompose;
-  } else if ([type isEqualToString:@"reply"]) {
-    return UIBarButtonSystemItemReply;
-  } else if ([type isEqualToString:@"action"]) {
-    return UIBarButtonSystemItemAction;
-  } else if ([type isEqualToString:@"organize"]) {
-    return UIBarButtonSystemItemOrganize;
-  } else if ([type isEqualToString:@"bookmarks"]) {
-    return UIBarButtonSystemItemBookmarks;
-  } else if ([type isEqualToString:@"search"]) {
-    return UIBarButtonSystemItemSearch;
-  } else if ([type isEqualToString:@"refresh"]) {
-    return UIBarButtonSystemItemRefresh;
-  } else if ([type isEqualToString:@"stop"]) {
-    return UIBarButtonSystemItemStop;
-  } else if ([type isEqualToString:@"camera"]) {
-    return UIBarButtonSystemItemCamera;
-  } else if ([type isEqualToString:@"trash"]) {
-    return UIBarButtonSystemItemTrash;
-  } else if ([type isEqualToString:@"play"]) {
-    return UIBarButtonSystemItemPlay;
-  } else if ([type isEqualToString:@"pause"]) {
-    return UIBarButtonSystemItemPause;
-  } else if ([type isEqualToString:@"rewind"]) {
-    return UIBarButtonSystemItemRewind;
-  } else if ([type isEqualToString:@"fastforward"]) {
-    return UIBarButtonSystemItemFastForward;
-  } else if ([type isEqualToString:@"undo"]) {
-    return UIBarButtonSystemItemUndo;
-  } else if ([type isEqualToString:@"redo"]) {
-    return UIBarButtonSystemItemRedo;
-  } else if ([type isEqualToString:@"pagecurl"]) {
-    return UIBarButtonSystemItemPageCurl;
-  } else {
-    NSLog(@"Unknown type passed to UIBarButtonSystemItem: %@", type);
-    return -1;
-  }
-}
-
-+(UIFont *) fontWithName:(NSString *) fontName sizeInPixels:(CGFloat) pixels {
-  static NSMutableDictionary *fontDict; // to hold the font dictionary
-  if ( fontName == nil ) {
-    // we default to @"HelveticaNeue-Medium" for our default font
-    fontName = @"HelveticaNeue-Medium";
-  }
-  if ( fontDict == nil ) {
-    fontDict = [ @{} mutableCopy ];
-  }
-  // create a key string to see if font has already been created
-  //
-  NSString *strFontHash = [NSString stringWithFormat:@"%@-%f", fontName , pixels];
-  UIFont *fnt = fontDict[strFontHash];
-  if ( fnt != nil ) {
-    return fnt; // we have already created this font
-  }
-  // lets play around and create a font that falls near the point size needed
-  CGFloat pointStart = pixels/4;
-  CGFloat lastHeight = -1;
-  UIFont * lastFont = [UIFont fontWithName:fontName size:.5];\
-  
-  NSMutableDictionary * dictAttrs = [ @{ } mutableCopy ];
-  NSString *fontCompareString = @"Mgj^";
-  for ( CGFloat pnt = pointStart ; pnt < 1000 ; pnt += .5 ) {
-    UIFont *font = [UIFont fontWithName:fontName size:pnt];
-    if ( font == nil ) {
-      NSLog(@"Unable to create font %@" , fontName );
-      NSAssert(font == nil, @"font name not found in fontWithName:sizeInPixels" ); // correct the font being past in
-    }
-    dictAttrs[NSFontAttributeName] = font;
-    CGSize cs = [fontCompareString sizeWithAttributes:dictAttrs];
-    CGFloat fheight =  cs.height;
-    if ( fheight == pixels  ) {
-      // that will be rare but we found it
-      fontDict[strFontHash] = font;
-      return font;
-    }
-    if ( fheight > pixels ) {
-      if ( lastFont == nil ) {
-        fontDict[strFontHash] = font;
-        return font;
-      }
-      // check which one is closer last height or this one
-      // and return the user
-      CGFloat fc1 = fabs( fheight - pixels );
-      CGFloat fc2 = fabs( lastHeight  - pixels );
-      // return the smallest differential
-      if ( fc1 < fc2 ) {
-        fontDict[strFontHash] = font;
-        return font;
-      } else {
-        fontDict[strFontHash] = lastFont;
-        return lastFont;
-      }
-    }
-    lastFont = font;
-    lastHeight = fheight;
-  }
-  NSAssert( false, @"Hopefully should never get here");
-  return nil;
-}
-
 - (void) doneWriting:(id)x {
 }
 
-BOOL _keyboardShouldClose;
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView { // 1 ([self close] is called after this, before (2)
-  if (!_keyboardShouldClose) {
-    [self close:textView];
-  }
-  return _keyboardShouldClose;
- // !!!!!!!!!! by setting this to NO you can keep the keyboard on open
+  // by setting this to NO you can keep the keyboard open (and handle closing it from JS or accbar buttons)
+  return allowClose;
 }
 
-
 - (void) textViewDidEndEditing:(UITextView *)textView { // 2
-  _keyboardShouldClose = YES;
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView { // 3
@@ -582,39 +394,49 @@ BOOL _keyboardShouldClose;
 }
 
 - (void) buttonTapped:(UIBarButtonItem*)button {
-  // if we send this index back to JS then it knows the index'd passed in item has been tapped
-  _keyboardShouldClose = YES;
-  [textView endEditing:YES];
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"buttonIndex":@(button.tag)}];
   pluginResult.keepCallback = [NSNumber numberWithBool:YES];
   [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
-  // TODO would be cool if we can pass this preference in - perhaps use a category on UIBarButtonItem ?
-//  if (allowHide) {
-//  }
 }
 
+BOOL allowClose = NO;
 - (void)hide:(CDVInvokedUrlCommand*)command {
-  if (textView != nil) {
-    [textView endEditing:YES];
+  allowClose = YES;
+  if (self.textView != nil) {
+    [self.textView endEditing:YES];
   }
+  [self close:nil];
 }
 
 - (void) close:(id)type {
-//  [textView removeFromSuperview];
-  [textView setHidden:YES];
+  //  [textView removeFromSuperview];
+  [self.textView setHidden:YES];
   [self.webView.scrollView setScrollEnabled:YES];
   self.webView.scrollView.delegate = nil;
   
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1000 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
-    if (_keyboardShouldClose) {
-      [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
+  [self dismissKeyboard:YES];
 
-      // restore the scroll position
-      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 50 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
-        [self.webView.scrollView setContentOffset: CGPointMake(0, _offsetTop) animated:YES];
-      });
-    }
+  // restore the scroll position
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 50 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+    [self.webView.scrollView setContentOffset: CGPointMake(0, _offsetTop) animated:YES];
   });
+}
+
+- (void)dismissKeyboard:(BOOL)animated
+{
+  // Dismisses the keyboard from any first responder in the window.
+  if (![self.textView isFirstResponder] /* && self.keyboardHC.constant > 0 */) {
+    [self.webView.window endEditing:NO];
+  }
+  
+  if (!animated) {
+    [UIView performWithoutAnimation:^{
+      [self.textView resignFirstResponder];
+    }];
+  }
+  else {
+    [self.textView resignFirstResponder];
+  }
 }
 
 // updated with the added text after every keypress (or empty string if backspace)
@@ -622,7 +444,25 @@ BOOL _keyboardShouldClose;
   NSLog(@"shouldChangeTextInRange: |%@|", text);
   // need to escape these to be able to pass to the webview
   if ([text isEqualToString:@"\n"]) {
-    text = @"\\n";
+    if (_textarea) {
+      text = @"\\n";
+    } else {
+      // send event to JS
+      CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"returnKeyPressed":@(YES)}];
+      pluginResult.keepCallback = [NSNumber numberWithBool:NO];
+      [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
+      // end editing
+      allowClose = YES;
+      [textView endEditing:YES];
+      return NO;
+    }
+  // ignore the 'tab' character
+  } else if ([text isEqualToString:@"\t"]) {
+    return NO;
+  }
+
+  if (_maxlength > 0 && textView.text.length >= _maxlength && text.length > 0) {
+    return NO;
   }
   /*
    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:text];
@@ -640,25 +480,11 @@ BOOL _keyboardShouldClose;
   NSLog(@"textViewDidChange: %@", text);
   // need to escape these to be able to pass to the webview
   if ([text isEqualToString:@"\n"]) {
-    if (_textarea) {
-      text = @"\\n";
-    } else {
-      // end editing
-      _keyboardShouldClose = YES;
-      [textView endEditing:YES];
-      return;
-    }
+    text = @"\\n";
   }
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"text":text}];
   pluginResult.keepCallback = [NSNumber numberWithBool:YES];
   [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
 }
-
-/*
- - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
- {
- int i=0;
- }
- */
 
 @end

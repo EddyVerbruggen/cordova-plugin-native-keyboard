@@ -1,4 +1,5 @@
 #import "NativeKeyboardHelper.h"
+#import "FontResolver.h"
 #import "SLKTextViewController.h"
 #import "SLKTextInputbar.h"
 #import "SLKTextView.h"

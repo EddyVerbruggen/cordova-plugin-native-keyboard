@@ -4,17 +4,21 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>Headers/FontResolver.h</key>
+		<data>
+		SoOtqq95MweNRlkTLFO85wjt7Nc=
+		</data>
 		<key>Headers/NSString+FontAwesome.h</key>
 		<data>
 		gRTsSYoJAbemHCri1IiRvXQJM2U=
 		</data>
 		<key>Headers/NativeKeyboard.h</key>
 		<data>
-		/BJ0AB+rNTQ8xvKd7pwpTtou17k=
+		RNVJKUF9DrCPNhHTZCtqMJWRMfw=
 		</data>
 		<key>Headers/NativeKeyboardHelper.h</key>
 		<data>
-		Q1LdSP2VrWxovPdp6uq4YbvcO0Q=
+		zLDIThfUy4+wKNjPv7aLdoVwP2E=
 		</data>
 		<key>Headers/SLKInputAccessoryView.h</key>
 		<data>
@@ -75,17 +79,21 @@
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>Headers/FontResolver.h</key>
+		<data>
+		SoOtqq95MweNRlkTLFO85wjt7Nc=
+		</data>
 		<key>Headers/NSString+FontAwesome.h</key>
 		<data>
 		gRTsSYoJAbemHCri1IiRvXQJM2U=
 		</data>
 		<key>Headers/NativeKeyboard.h</key>
 		<data>
-		/BJ0AB+rNTQ8xvKd7pwpTtou17k=
+		RNVJKUF9DrCPNhHTZCtqMJWRMfw=
 		</data>
 		<key>Headers/NativeKeyboardHelper.h</key>
 		<data>
-		Q1LdSP2VrWxovPdp6uq4YbvcO0Q=
+		zLDIThfUy4+wKNjPv7aLdoVwP2E=
 		</data>
 		<key>Headers/SLKInputAccessoryView.h</key>
 		<data>

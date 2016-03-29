@@ -3,6 +3,8 @@
 
 @interface CDVNativeKeyboard : CDVPlugin<UITextViewDelegate, UIScrollViewDelegate, NSLayoutManagerDelegate>
 
+@property (nonatomic, strong) UITextView *textView;
+
 - (void)show:(CDVInvokedUrlCommand*)command;
 - (void)hide:(CDVInvokedUrlCommand*)command;
 

@@ -72,7 +72,7 @@ NativeKeyboard.showMessenger(options, onSuccess);
 
 
 
-TODO all below
+TODO all below, see demo/index.html for better docs at the moment.
 
 
 
