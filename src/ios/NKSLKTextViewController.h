@@ -1,7 +1,5 @@
-//#import <NativeKeyboard/NativeKeyboard.h>
-#import "SLKTextViewController.h"
-#import "NativeKeyboardHelper.h"
 #import <Cordova/CDV.h>
+#import <NativeKeyboard/NativeKeyboard.h>
 
 @interface NKSLKTextViewController : SLKTextViewController
 
