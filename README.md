@@ -7,5 +7,7 @@ __March 22 '16__: Work in progress. This is a huge effort to get right so please
 
 __March 26 '16__: Still work in progress, but the messenger component is nearing completion. Check out the screenshots below. 
 
+__April 2 '16__: Nearing completion - [please let me](mailto:eddyverbruggen@gmail.com) know if you want to __BETA TEST__ this baby!
+
 <img src="screenshots/messenger-1.png" width="350px"/>&nbsp;&nbsp;&nbsp;
 <img src="screenshots/messenger-2.png" width="350px"/>
