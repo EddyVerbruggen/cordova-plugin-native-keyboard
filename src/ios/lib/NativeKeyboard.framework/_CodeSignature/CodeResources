@@ -4,9 +4,21 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>Headers/FontInspector.h</key>
+		<data>
+		fBFr0kGllf68X0zt/dnaAb0r558=
+		</data>
+		<key>Headers/FontRegistry.h</key>
+		<data>
+		hitVC572xBIgNSuFXWnxxhx8h4I=
+		</data>
 		<key>Headers/FontResolver.h</key>
 		<data>
 		SoOtqq95MweNRlkTLFO85wjt7Nc=
+		</data>
+		<key>Headers/IonIcons.h</key>
+		<data>
+		8k+QETUIQeLmmnvGRJPXQwpLdQI=
 		</data>
 		<key>Headers/NSString+FontAwesome.h</key>
 		<data>
@@ -14,11 +26,11 @@
 		</data>
 		<key>Headers/NativeKeyboard.h</key>
 		<data>
-		RNVJKUF9DrCPNhHTZCtqMJWRMfw=
+		55lF/xDznxHI3b28jS7Ub5b9yAM=
 		</data>
 		<key>Headers/NativeKeyboardHelper.h</key>
 		<data>
-		zLDIThfUy4+wKNjPv7aLdoVwP2E=
+		qzDLq9H87JLpuUQ5CU7s//tD7z8=
 		</data>
 		<key>Headers/SLKInputAccessoryView.h</key>
 		<data>
@@ -67,21 +79,45 @@
 		<key>Headers/UIView+SLKAdditions.h</key>
 		<data>
 		NFQWB2QmroJtYjCAIC8HNhcqdUg=
+		</data>
+		<key>Headers/ionicons-codes.h</key>
+		<data>
+		YQmTpibVwI2GofquIEtza2aORFQ=
 		</data>
 		<key>Info.plist</key>
 		<data>
 		64KXmy0Z+KW0ODTWYD0kRzdDocc=
 		</data>
+		<key>LICENSE</key>
+		<data>
+		b9RKHJi/ScTpJgYlb6tKXm/BJO0=
+		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
 		iC1FXe3z0bGk/s6SzOHt83+7g+E=
 		</data>
+		<key>ionicons.bundle/ionicons.ttf</key>
+		<data>
+		lWEW6+SzoxWxpDAJVn5vitCppyA=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>Headers/FontInspector.h</key>
+		<data>
+		fBFr0kGllf68X0zt/dnaAb0r558=
+		</data>
+		<key>Headers/FontRegistry.h</key>
+		<data>
+		hitVC572xBIgNSuFXWnxxhx8h4I=
+		</data>
 		<key>Headers/FontResolver.h</key>
 		<data>
 		SoOtqq95MweNRlkTLFO85wjt7Nc=
+		</data>
+		<key>Headers/IonIcons.h</key>
+		<data>
+		8k+QETUIQeLmmnvGRJPXQwpLdQI=
 		</data>
 		<key>Headers/NSString+FontAwesome.h</key>
 		<data>
@@ -89,11 +125,11 @@
 		</data>
 		<key>Headers/NativeKeyboard.h</key>
 		<data>
-		RNVJKUF9DrCPNhHTZCtqMJWRMfw=
+		55lF/xDznxHI3b28jS7Ub5b9yAM=
 		</data>
 		<key>Headers/NativeKeyboardHelper.h</key>
 		<data>
-		zLDIThfUy4+wKNjPv7aLdoVwP2E=
+		qzDLq9H87JLpuUQ5CU7s//tD7z8=
 		</data>
 		<key>Headers/SLKInputAccessoryView.h</key>
 		<data>
@@ -143,9 +179,21 @@
 		<data>
 		NFQWB2QmroJtYjCAIC8HNhcqdUg=
 		</data>
+		<key>Headers/ionicons-codes.h</key>
+		<data>
+		YQmTpibVwI2GofquIEtza2aORFQ=
+		</data>
+		<key>LICENSE</key>
+		<data>
+		b9RKHJi/ScTpJgYlb6tKXm/BJO0=
+		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
 		iC1FXe3z0bGk/s6SzOHt83+7g+E=
+		</data>
+		<key>ionicons.bundle/ionicons.ttf</key>
+		<data>
+		lWEW6+SzoxWxpDAJVn5vitCppyA=
 		</data>
 	</dict>
 	<key>rules</key>

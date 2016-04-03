@@ -5,15 +5,13 @@
 
 bool DEBUG_KEYBOARD = NO;
 
-//UITextView *textView;
-UIToolbar *toolBar;
-NSString *_callbackId;
-double _offsetTop;
-double _lineSpacing;
-bool _textarea;
-int _maxlength;
-NKSLKTextViewController *tvc;
-
+NKSLKTextViewController * tvc;
+UIToolbar * toolBar;
+NSString * callbackId;
+double offsetTop;
+double lineSpacing;
+bool textarea;
+int maxlength;
 
 //  - (void)addTarget:(nullable id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents;
 
@@ -96,27 +94,32 @@ NKSLKTextViewController *tvc;
   if (![NativeKeyboardHelper allowFeature:NKFeatureMessenger]) {
     return;
   }
-  if (tvc != nil) {
-    [tvc setTextInputbarHidden:NO animated:YES];
-    [tvc updateWithCommand:command andCommandDelegate:self.commandDelegate];
-  } else {
-    tvc = [[NKSLKTextViewController alloc] initWithScrollView:self.webView.scrollView
-                                                  withCommand:command
-                                           andCommandDelegate:self.commandDelegate];
+
+  NSDictionary* options = [command argumentAtIndex:0];
+
+  [self.textView removeFromSuperview];
+
+  tvc = [[NKSLKTextViewController alloc] initWithScrollView:self.webView.scrollView
+                                                withCommand:command
+                                         andCommandDelegate:self.commandDelegate];
+
+  NSArray * ors = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
+  NSArray * suppOrientations = [((CDVViewController*)self.viewController) parseInterfaceOrientations:ors];
+  [tvc setSupportedInterfaceOrientations:suppOrientations];
     
-    NSArray * ors = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
-    NSArray * suppOrientations = [((CDVViewController*)self.viewController) parseInterfaceOrientations:ors];
-    [tvc setSupportedInterfaceOrientations:suppOrientations];
-    
-    // if a backgroundcolor is passed in use that, otherwise use the webview bgcolor
-    tvc.view.backgroundColor = self.webView.backgroundColor;
-    [self.viewController.view.window setRootViewController:tvc];
-  }
+  // if a backgroundcolor is passed in use that (TODO), otherwise use the webview bgcolor
+  tvc.view.backgroundColor = self.webView.backgroundColor;
+  
+  [tvc setTextInputbarHidden:YES animated:NO];
+  [self.viewController.view addSubview:tvc.view];
+  [tvc setTextInputbarHidden:NO animated:[options[@"animated"] boolValue]];
 }
 
 - (void)hideMessenger:(CDVInvokedUrlCommand*)command {
   if (tvc != nil) {
-    [tvc setTextInputbarHidden:YES animated:YES];
+    NSDictionary* options = [command argumentAtIndex:0];
+    [tvc setTextInputbarHidden:YES animated:[options[@"animated"] boolValue]];
+    tvc = nil;
   }
 }
 
@@ -131,11 +134,16 @@ NKSLKTextViewController *tvc;
  */
 - (void)show:(CDVInvokedUrlCommand*)command {
   NSDictionary* options = [command argumentAtIndex:0];
+
+  // to make this play nice with the messenger, we need to do:
+  if (![self.textView isDescendantOfView:self.viewController.view]) {
+    [self.viewController.view addSubview:self.textView];
+  }
   
   allowClose = NO;
   [self.textView setHidden:NO];
   
-  _offsetTop = [options[@"offsetTop"] doubleValue];
+  offsetTop = [options[@"offsetTop"] doubleValue];
   
   CGRect screenBounds = [[UIScreen mainScreen] bounds];
   
@@ -145,7 +153,7 @@ NKSLKTextViewController *tvc;
       [self.textView setKeyboardType:keyBoardType];
     }
   }
-  _textarea = [@"textarea" isEqualToString:options[@"type"]];
+  textarea = [@"textarea" isEqualToString:options[@"type"]];
 
   
   NSString *returnKeyType = nil;
@@ -154,7 +162,7 @@ NKSLKTextViewController *tvc;
     returnKeyType = returnKeyOptions[@"type"];
   }
   if (returnKeyType == nil) {
-    if (!_textarea) {
+    if (!textarea) {
       // change the default of an input text field to 'done' (instead of 'return')
       returnKeyType = @"done";
     }
@@ -204,6 +212,12 @@ NKSLKTextViewController *tvc;
         if (image != nil) {
           button = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonTapped:)];
         }
+      } else if ([btnType isEqualToString:@"ionicon"]) {
+        UIImage* image;
+        image = [NativeKeyboardHelper getIonImage:btnValue withFontSize:[btn[@"fontSize"] intValue] andColor:btn[@"color"]];
+        if (image != nil) {
+          button = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonTapped:)];
+        }
       }
       if (button != nil) {
         button.tag = i;
@@ -230,14 +244,14 @@ NKSLKTextViewController *tvc;
     }
   }
   
-  if (_textarea) {
+  if (textarea) {
     self.textView.textContainer.maximumNumberOfLines = 0; // no limit, which is not correct perse
   } else {
     self.textView.textContainer.maximumNumberOfLines = 1;
   }
 
   // used elsewhere
-  _maxlength = [options[@"maxlength"] intValue];
+  maxlength = [options[@"maxlength"] intValue];
 
   NSDictionary *padding = options[@"padding"];
   //  double paddingTop = [padding[@"top"] doubleValue];
@@ -246,7 +260,7 @@ NKSLKTextViewController *tvc;
   //  double paddingRight = [padding[@"right"] doubleValue];
   // TODO for a textarea the padding is not correct
   //textView.textContainerInset = UIEdgeInsetsMake(paddingTop, paddingLeft, paddingBottom, paddingRight);
-  if (_textarea) {
+  if (textarea) {
     self.textView.textContainerInset = UIEdgeInsetsMake(0, 3, 0, 0);
   } else {
     self.textView.textContainerInset = UIEdgeInsetsZero;
@@ -275,7 +289,7 @@ NKSLKTextViewController *tvc;
   NSDictionary *box = options[@"box"];
   double left = [box[@"left"] doubleValue] + borderLeft + paddingLeft; // - marginLeft;
   double top = [box[@"top"] doubleValue] + borderTop + marginTop;
-  double width = [box[@"width"] doubleValue] - 8; // TODO
+  double width = [box[@"width"] doubleValue] - 8 + (textarea ? 3 : 0);
   double height = [box[@"height"] doubleValue];
   
   double setOriginYto = phoneHeight - keyboardHeight - height;
@@ -290,10 +304,9 @@ NKSLKTextViewController *tvc;
   
   // adjust the scrollposition if needed
   if (top > setOriginYto) {
-    if (!DEBUG_KEYBOARD) {
-      // set this to 0 to hide the caret initially
-      self.textView.alpha = 0;
-    }
+    // set this to 0 to hide the caret initially
+    self.textView.alpha = 0;
+
     // in case we were already editing, but now hopping to a field lower on the screen
     // enable scrolling and hide the caret for a sec
     if (!self.webView.scrollView.isScrollEnabled) {
@@ -301,7 +314,7 @@ NKSLKTextViewController *tvc;
       self.textView.alpha = 0;
     }
 
-    [self.webView.scrollView setContentOffset: CGPointMake(0, (top-setOriginYto)+_offsetTop) animated:YES];
+    [self.webView.scrollView setContentOffset: CGPointMake(0, (top-setOriginYto)+offsetTop) animated:YES];
     
     // do this to early and things will crash
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 500 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
@@ -310,11 +323,9 @@ NKSLKTextViewController *tvc;
     });
     
     // now show the caret
-    if (!DEBUG_KEYBOARD) {
-      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 300 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
-        self.textView.alpha = 1;
-      });
-    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 300 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+      self.textView.alpha = 1;
+    });
   } else {
     [self.webView.scrollView setScrollEnabled:NO];
     self.webView.scrollView.delegate = self;
@@ -343,14 +354,13 @@ NKSLKTextViewController *tvc;
   self.textView.textContainer.lineFragmentPadding = 0;
   self.textView.attributedText = [[NSAttributedString alloc] initWithString:text attributes:attrsDictionary];
   
-  if (!_textarea) {
+  if (!textarea) {
     double verticalAlignMiddleCompensation = ([box[@"height"] doubleValue] - [self.textView contentSize].height * [self.textView zoomScale])/2.0;
     self.textView.frame = CGRectMake(left, self.textView.frame.origin.y + verticalAlignMiddleCompensation, width, height - verticalAlignMiddleCompensation);
   }
   
   if (self.textView.superview == nil) {
-    [self.viewController.view addSubview: self.textView];
-  } else {
+    [self.webView addSubview: self.textView];
   }
   if (!DEBUG_KEYBOARD) {
     self.textView.textColor = [UIColor clearColor];
@@ -358,14 +368,16 @@ NKSLKTextViewController *tvc;
     //    textView.textColor = [UIColor greenColor];
   }
   
+//  [self.webView addSubview:self.textView];
+
   [self.textView reloadInputViews];
   
   [self.textView becomeFirstResponder];
   
-  _callbackId = command.callbackId;
+  callbackId = command.callbackId;
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
   pluginResult.keepCallback = [NSNumber numberWithBool:YES];
-  [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
 - (void)textFieldDidChange:(NSNotification *)notification {
@@ -396,7 +408,7 @@ NKSLKTextViewController *tvc;
 - (void) buttonTapped:(UIBarButtonItem*)button {
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"buttonIndex":@(button.tag)}];
   pluginResult.keepCallback = [NSNumber numberWithBool:YES];
-  [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
 BOOL allowClose = NO;
@@ -418,7 +430,7 @@ BOOL allowClose = NO;
 
   // restore the scroll position
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 50 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
-    [self.webView.scrollView setContentOffset: CGPointMake(0, _offsetTop) animated:YES];
+    [self.webView.scrollView setContentOffset: CGPointMake(0, offsetTop) animated:YES];
   });
 }
 
@@ -444,13 +456,13 @@ BOOL allowClose = NO;
   NSLog(@"shouldChangeTextInRange: |%@|", text);
   // need to escape these to be able to pass to the webview
   if ([text isEqualToString:@"\n"]) {
-    if (_textarea) {
+    if (textarea) {
       text = @"\\n";
     } else {
       // send event to JS
       CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"returnKeyPressed":@(YES)}];
       pluginResult.keepCallback = [NSNumber numberWithBool:NO];
-      [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
+      [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
       // end editing
       allowClose = YES;
       [textView endEditing:YES];
@@ -461,7 +473,7 @@ BOOL allowClose = NO;
     return NO;
   }
 
-  if (_maxlength > 0 && textView.text.length >= _maxlength && text.length > 0) {
+  if (maxlength > 0 && textView.text.length >= maxlength && text.length > 0) {
     return NO;
   }
   /*
@@ -484,7 +496,7 @@ BOOL allowClose = NO;
   }
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"text":text}];
   pluginResult.keepCallback = [NSNumber numberWithBool:YES];
-  [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
 @end

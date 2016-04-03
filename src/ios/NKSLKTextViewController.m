@@ -101,12 +101,6 @@ BOOL _disableLefButtonWhenTextEntered;
   [super didPressRightButton:sender];
 }
 
-- (void)updateWithCommand:(CDVInvokedUrlCommand*)command andCommandDelegate:(id <CDVCommandDelegate>)commandDelegate {
-  _commandDelegate = commandDelegate;
-  _command = command;
-  [self configureMessenger];
-}
-
 - (instancetype)initWithScrollView:(UIScrollView *)scrollView withCommand:(CDVInvokedUrlCommand*)command andCommandDelegate:(id <CDVCommandDelegate>)commandDelegate {
   self = [super initWithScrollView:scrollView];
   _commandDelegate = commandDelegate;
@@ -161,17 +155,13 @@ BOOL _disableLefButtonWhenTextEntered;
   self.textInputbar.counterStyle = slkCounterStyle;
   self.textInputbar.counterPosition = SLKCounterPositionTop; // TODO pass in some day
   
-  // we can also set the keyboard type!
   if (options[@"type"] != nil) {
     if ([NativeKeyboardHelper allowFeature:NKFeatureKeyboardType]) {
       UIKeyboardType keyBoardType = [NativeKeyboardHelper getUIKeyboardType:options[@"type"]];
       [self.textInputbar.textView setKeyboardType:keyBoardType];
     }
   }
-  
-  
-  //  [self.textInputbar.textView setKeyboardType:UIKeyboardTypePhonePad];
-  
+
   if ([options[@"showKeyboard"] boolValue]) {
     [self presentKeyboard:YES];
   }
@@ -182,6 +172,8 @@ BOOL _disableLefButtonWhenTextEntered;
     NSString *type = leftButton[@"type"];
     if ([@"fa" isEqualToString:type] || [@"fontawesome" isEqualToString:type]) {
       [NativeKeyboardHelper setFAImage:leftButton[@"value"] onButton:self.leftButton withColor:leftButton[@"color"]];
+    } else if ([@"ion" isEqualToString:type] || [@"ionicon" isEqualToString:type]) {
+      [NativeKeyboardHelper setIonImage:leftButton[@"value"] onButton:self.leftButton withColor:leftButton[@"color"]];
     }
   }
   

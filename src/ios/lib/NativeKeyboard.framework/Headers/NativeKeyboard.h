@@ -13,7 +13,7 @@
 #import "SLKInputAccessoryView.h"
 #import "UIImage+FontAwesome.h"
 #import "UIResponder+SLKAdditions.h"
-
+#import "IonIcons.h"
 
 //! Project version number for NativeKeyboard.
 FOUNDATION_EXPORT double NativeKeyboardVersionNumber;

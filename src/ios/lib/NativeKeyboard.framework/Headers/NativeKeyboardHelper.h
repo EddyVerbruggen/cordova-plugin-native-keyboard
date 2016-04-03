@@ -17,8 +17,12 @@ typedef NS_ENUM(NSInteger, NKFeature) {
 
 + (UIImage*) getFAImage:(NSString*)icon;
 + (UIImage*) getFAImage:(NSString*)icon withFontSize:(int)fontSize;
-
 + (void) setFAImage:(NSString*)icon onButton:(UIButton*)button withColor:(NSString*)color;
+
++ (UIImage*) getIonImage:(NSString*)icon;
++ (UIImage*) getIonImage:(NSString*)icon withFontSize:(int)fontSize;
++ (UIImage*) getIonImage:(NSString*)icon withFontSize:(int)fontSize andColor:(NSString*)color;
++ (void) setIonImage:(NSString*)icon onButton:(UIButton*)button withColor:(NSString*)color;
 
 + (void) setUIBarStyle:(NSString*)style forToolbar:(UIToolbar*)toolBar;
 

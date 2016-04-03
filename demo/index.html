@@ -7,20 +7,10 @@
           content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
           <link rel="stylesheet" type="text/css" href="css/index.css">
             <title>Native Keyboard demo</title>
-  </head>
+            </head>
   <body>
     <div class="app">
       <h2>Native Keyboard</h2>
-
-
-      <!--
-       
-          BIG FAT WARNING:
-              Using showMessenger will currently mess up your app's view hierarchy so bad that you will need
-              to kill your app before it can show a keyboard triggered by '<input data-nativekeyboard="..">.
-       
-       -->
-      
       
       <script>
         function configureNativeKeyboard(col) {
@@ -35,49 +25,60 @@
               color: '#ffffff', // the color of the buttons
               style: 'blackTranslucent', // 'default', 'blackTranslucent', 'blackOpaque'
               buttons: [
-                  {
-                    type: 'system',
-                    value: 'compose',
-                    callback: function() {console.log('COMPOSE button pressed');}
-                  },
-                  {
-                    type: 'system',
-                    value: 'add',
-                    close: true, // tells the keyboard to close after this is pressed
-                    callback: function() {console.log('CAMERA button pressed (closes keyboard)');}
-                  },
-                  {
-                    type: 'system',
-                    value: 'flexibleSpace'
-                  },
-                  {
-                    type: 'fontawesome',
-                    value: 'thumbs-o-down',
-                    fontSize: 24, // this is the default as well
-                    callback: function() {console.log('DISLIKE button pressed');}
-                  },
-                  {
-                    type: 'system',
-                    value: 'fixedspace',
-                    width: 12
-                  },
-                  {
-                    type: 'fa',
-                    value: 'fa-thumbs-o-up',
-                    fontSize: 24,
-                    callback: function() {console.log('LIKE button pressed');}
-                  },
-                  {
-                    type: 'system',
-                    value: 'flexibleSpace'
-                  },
-                  {
-                    type: 'text',
-                    value: 'Close',
-                    style: 'done', // makes the text bold. default: plain
-                    close: true
-                  }
-              ]
+                        {
+                          type: 'system',
+                          value: 'reply',
+                          callback: function() {console.log('COMPOSE button pressed');}
+                        },
+                        {
+                          type: 'system',
+                          value: 'flexibleSpace'
+                        },
+                        {
+                          type: 'ionicon', // or 'text', 'system, 'fontawesome'
+                          value: '\uf463', // http://ionicons.com/, right-click and inspect the :before value
+                          color: '#ffffff', // default '#ffffff'
+                          fontSize: 22, // default 22
+                          callback: function() {console.log('MIN button pressed (closes keyboard)');}
+                        },
+                        {
+                          type: 'ionicon', // or 'text', 'system, 'fontawesome'
+                          value: '\uf48a', // http://ionicons.com/, right-click and inspect the :before value
+                          color: '#ffffff', // default '#ffffff'
+                          fontSize: 22, // default 22
+                          callback: function() {console.log('PLUS button pressed (closes keyboard)');}
+                        },
+                        {
+                          type: 'system',
+                          value: 'flexibleSpace'
+                        },
+                        {
+                          type: 'fontawesome',
+                          value: 'thumbs-o-down',
+                          fontSize: 22, // this is the default as well
+                          callback: function() {console.log('DISLIKE button pressed');}
+                        },
+                        {
+                          type: 'system',
+                          value: 'fixedspace',
+                          width: 12
+                        },
+                        {
+                          type: 'fa',
+                          value: 'fa-thumbs-o-up',
+                          callback: function() {console.log('LIKE button pressed');}
+                        },
+                        {
+                          type: 'system',
+                          value: 'flexibleSpace'
+                        },
+                        {
+                          type: 'text',
+                          value: 'Close',
+                          style: 'plain', // 'done' makes the text bold. default: plain
+                          close: true
+                        }
+                       ]
             }
           }
         }
@@ -88,49 +89,49 @@
         <br/><input data-nativekeyboard="true" type="text" value="max 15 chars" maxlength="15" style="font-size:13px; font-family:Helvetica; font-style:italic" /><br/><br/>
         
         <br/><input data-nativekeyboard='{"type":"decimal", "maxlength":4}' type="text" value="100" style="font-family: Verdana; font-size:15px; font-weight: bold" /><br/><br/>
-
+        
         <br/><input data-nativekeyboard='{"type":"numbersandpunctuation", "accessorybar":{}}' type="number" value="200" style="font-family: Verdana; font-size:15px; font-weight: bold" /><br/><br/>
-
+        
         <br/><input data-nativekeyboard='{"type":"decimal"}' type="text" value="19.95" style="font-family: Arial; font-size:15px; font-weight: bold" /><br/><br/>
-
+        
         <br/><input data-nativekeyboard='configureNativeKeyboard("#FF0000")' type="tel" value="+31650123456" style="font-family: Arial; font-size:15px; font-weight: bold" /><br/><br/>
-
+        
         <br/><input data-nativekeyboard='configureNativeKeyboard' type="email" value="sergey@google.com" style="font-family: Arial; font-size:12px; font-weight: normal" /><br/><br/>
-
+        
         <br/><input data-nativekeyboard='{"type":"twitter"}' type="text" value="@eddyverbruggen" style="font-family: Arial; font-size:12px; font-weight: normal; color: #FF0000" /><br/><br/>
-
+        
         <br/><textarea data-nativekeyboard='{}' style="font-size:15px; font-family:Helvetica; font-weight: bold; border-radius:0">Helvetica</textarea><br/><br/>
-
+        
         <br/><textarea data-nativekeyboard='{}' style="font-size:15px; font-family:Arial; border-radius:5">Arial, with border radius</textarea><br/><br/>
-
+        
         <!--br/><div data-nativekeyboard='{"type":"default"}' id="content" onclick="window.plugins.toast.editText(this)" style="width:200px;height:50px;background-color:#ddd;text-transform:none">12345</div><br/><br/>
-
-        <br/><div data-nativekeyboard='{"type":"decimal"}' id="content2" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; border:4px solid red; font-family: Arial; width:160px; height:50px; color:#fff; background-color:#000; text-transform:none">9,95</div><br/><br/>
-
-        <br/><div data-nativekeyboard='{"type":"phone"}' id="content3" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; padding:4px; font-family: Arial; width:160px; height:50px; color:#fff; background-color:#000; text-transform:none">0650298958</div><br/><br/>
-
-        <br/><div data-nativekeyboard='{"type":"number"}' id="content4" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; margin: 4px; font-family: Arial; width:160px; height:50px; color:#fff; background-color:#000; text-transform:none">112233</div><br/><br/>
-
-        <br/><div data-nativekeyboard='{"type":"namephone"}' id="content5" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Arial; width:160px; height:50px; color:#222; background-color:#fff; text-transform:none">namephone</div><br/><br/>
-
-        <br/><div data-nativekeyboard='{"type":"numberspunc"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">numberspunc</div><br/><br/>
-
-        <br/><div data-nativekeyboard='{"type":"twitter"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">twitter</div><br/><br/>
-
-        <br/><div data-nativekeyboard='{"type":"email"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">email</div><br/><br/>
-
-        <br/><div data-nativekeyboard='{"type":"url"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">url</div><br/><br/>
-
-        <br/><div data-nativekeyboard='{"type":"alphabet"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">alphabet</div><br/><br/>
-
-        <br/><div data-nativekeyboard='{"type":"search"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">search</div><br/><br/>
-
-        <br/><div data-nativekeyboard='{"type":"ascii"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">ascii</div><br/><br/-->
-
-      <p class="event received">Device is Ready</p>
+         
+         <br/><div data-nativekeyboard='{"type":"decimal"}' id="content2" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; border:4px solid red; font-family: Arial; width:160px; height:50px; color:#fff; background-color:#000; text-transform:none">9,95</div><br/><br/>
+         
+         <br/><div data-nativekeyboard='{"type":"phone"}' id="content3" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; padding:4px; font-family: Arial; width:160px; height:50px; color:#fff; background-color:#000; text-transform:none">0650298958</div><br/><br/>
+         
+         <br/><div data-nativekeyboard='{"type":"number"}' id="content4" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; margin: 4px; font-family: Arial; width:160px; height:50px; color:#fff; background-color:#000; text-transform:none">112233</div><br/><br/>
+         
+         <br/><div data-nativekeyboard='{"type":"namephone"}' id="content5" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Arial; width:160px; height:50px; color:#222; background-color:#fff; text-transform:none">namephone</div><br/><br/>
+         
+         <br/><div data-nativekeyboard='{"type":"numberspunc"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">numberspunc</div><br/><br/>
+         
+         <br/><div data-nativekeyboard='{"type":"twitter"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">twitter</div><br/><br/>
+         
+         <br/><div data-nativekeyboard='{"type":"email"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">email</div><br/><br/>
+         
+         <br/><div data-nativekeyboard='{"type":"url"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">url</div><br/><br/>
+         
+         <br/><div data-nativekeyboard='{"type":"alphabet"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">alphabet</div><br/><br/>
+         
+         <br/><div data-nativekeyboard='{"type":"search"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">search</div><br/><br/>
+         
+         <br/><div data-nativekeyboard='{"type":"ascii"}' id="content6" onclick="window.plugins.toast.editText(this)" style="font-size: 16px; font-family: Helvetica; width:160px; height:50px; color:#ddd; background-color:#555; text-transform:none">ascii</div><br/><br/-->
+        
+        <p class="event received">Device is Ready</p>
         <br/>
         <button onclick="showMessenger()">show messenger</button>
-        <button onclick="NativeKeyboard.hideMessenger()">hide messenger</button>
+        <button onclick="NativeKeyboard.hideMessenger({animated:true})">hide messenger</button>
         <br/>
         <div id="messages">First<br/><br/>Second<br/><br/>Third</div>
         <br/>
@@ -141,54 +142,55 @@
     </div>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-        <script>
-//          document.addEventListener('deviceready', showMessenger, false);
-          function showMessenger() {
-            var options = {
-              placeholder: 'Message',
-              placeholderColor: "#DDDDDD",
-              textViewBackgroundColor: "#F6F6F6",
-              textViewContainerBackgroundColor: "#DDDDDD",
-              textViewBorderColor: "#777777",
-              maxChars: 80, // setting this > 0 will make the counter show up
-              counterStyle: 'countdownreversed', // note that 'none' still shows a counter in case maxChars is set
-              textColor: '#555555',
-              backgroundColor: '#FFFFFF',
-              scrollToBottomAfterKeyboardShows: false, // note that the webview should be scrollable, not a container-div - but you can always do this manually from JS. default false.
-              leftButton: {
-                type: 'fontawesome', // or 'text'
-                value: 'camera', // http://fontawesome.io/icons/, with or without the 'fa-' prefix
-            //        color: '#666666', // default iOS blue
-                disabledWhenTextEntered: true, // default false
-                callback: function() {
-                  alert("Camera icon pressed - showing an ActionSheet seems appropriate now.");
-                }
-              },
-              rightButton: {
-                type: 'text', // or 'fa|fontawesome'
-                value: 'Send', // default 'Send'
+    <script>
+      //          document.addEventListener('deviceready', showMessenger, false);
+      function showMessenger() {
+        var options = {
+          animated: true, // slide-in animation, default no animation
+          placeholder: 'Message',
+          placeholderColor: "#DDDDDD",
+          textViewBackgroundColor: "#F6F6F6",
+          textViewContainerBackgroundColor: "#DDDDDD",
+          textViewBorderColor: "#777777",
+          maxChars: 80, // setting this > 0 will make the counter show up
+          counterStyle: 'countdownreversed', // note that 'none' still shows a counter in case maxChars is set
+          textColor: '#555555',
+          backgroundColor: '#FFFFFF',
+          scrollToBottomAfterKeyboardShows: false, // note that the webview should be scrollable, not a container-div - but you can always do this manually from JS. default false.
+          leftButton: {
+            type: 'ionicon', // or 'text' or 'fontawesome'
+            value: '\uf48a', // http://ionicons.com/, right-click and inspect the :before value
+            color: '#ff0000', // default iOS blue
+            disabledWhenTextEntered: true, // default false
+            callback: function() {
+              alert("Camera icon pressed - showing an ActionSheet seems appropriate now.");
+            }
+          },
+          rightButton: {
+            type: 'text', // or 'fa|fontawesome'
+            value: 'Send', // default 'Send'
             //        color: '#FF0000', // default iOS blue
-                callback: function() {
-                  // by default the keyboard will hide but the bar will remain in view after sending a message,
-                  // enable this line to also hide that bar
-            //          NativeKeyboard.hideMessenger();
-                }
-              }
-            };
-                      
-            var onSuccess = function (result) {
-              if (result.text) {
-                console.log("Text entered: " + result.text);
-                document.getElementById("messages").innerHTML = document.getElementById("messages").innerHTML + "<br/><br/>" + result.text;
-              } else if (result.keyboardDidShow === true && result.keyboardHeight) {
-                console.log("Keyboard is shown with height: " + result.keyboardHeight);
-              } else if (result.keyboardWillHide) {
-                console.log("Keyboard is hiding");
-              }
-            };
-
-            NativeKeyboard.showMessenger(options, onSuccess);
-          };
-        </script>
+            callback: function() {
+              // by default the keyboard will hide but the bar will remain in view after sending a message,
+              // enable this line to also hide that bar
+              //          NativeKeyboard.hideMessenger();
+            }
+          }
+        };
+        
+        var onSuccess = function (result) {
+          if (result.text) {
+            console.log("Text entered: " + result.text);
+            document.getElementById("messages").innerHTML = document.getElementById("messages").innerHTML + "<br/><br/>" + result.text;
+          } else if (result.keyboardDidShow === true && result.keyboardHeight) {
+            console.log("Keyboard is shown with height: " + result.keyboardHeight);
+          } else if (result.keyboardWillHide) {
+            console.log("Keyboard is hiding");
+          }
+        };
+        
+        NativeKeyboard.showMessenger(options, onSuccess);
+      };
+    </script>
   </body>
 </html>
