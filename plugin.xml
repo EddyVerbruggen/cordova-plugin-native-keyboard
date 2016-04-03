@@ -46,9 +46,11 @@
     <framework src="src/ios/lib/NativeKeyboard.framework" custom="true" />
 
     <resource-file src="src/ios/FontAwesome.ttf" target="FontAwesome.ttf" />
+    <resource-file src="src/ios/ionicons.ttf" target="ionicons.ttf" />
     <config-file target="*-Info.plist" parent="UIAppFonts">
       <array>
         <string>FontAwesome.ttf</string>
+        <string>ionicons.ttf</string>
       </array>
     </config-file>
     

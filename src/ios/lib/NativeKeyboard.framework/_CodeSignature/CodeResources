@@ -4,14 +4,6 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Headers/FontInspector.h</key>
-		<data>
-		fBFr0kGllf68X0zt/dnaAb0r558=
-		</data>
-		<key>Headers/FontRegistry.h</key>
-		<data>
-		hitVC572xBIgNSuFXWnxxhx8h4I=
-		</data>
 		<key>Headers/FontResolver.h</key>
 		<data>
 		SoOtqq95MweNRlkTLFO85wjt7Nc=
@@ -26,7 +18,7 @@
 		</data>
 		<key>Headers/NativeKeyboard.h</key>
 		<data>
-		55lF/xDznxHI3b28jS7Ub5b9yAM=
+		2mtzZ+iNqWQc1Jpg4h0TJG9PWl4=
 		</data>
 		<key>Headers/NativeKeyboardHelper.h</key>
 		<data>
@@ -103,14 +95,6 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Headers/FontInspector.h</key>
-		<data>
-		fBFr0kGllf68X0zt/dnaAb0r558=
-		</data>
-		<key>Headers/FontRegistry.h</key>
-		<data>
-		hitVC572xBIgNSuFXWnxxhx8h4I=
-		</data>
 		<key>Headers/FontResolver.h</key>
 		<data>
 		SoOtqq95MweNRlkTLFO85wjt7Nc=
@@ -125,7 +109,7 @@
 		</data>
 		<key>Headers/NativeKeyboard.h</key>
 		<data>
-		55lF/xDznxHI3b28jS7Ub5b9yAM=
+		2mtzZ+iNqWQc1Jpg4h0TJG9PWl4=
 		</data>
 		<key>Headers/NativeKeyboardHelper.h</key>
 		<data>
