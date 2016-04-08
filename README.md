@@ -15,7 +15,7 @@ cordova create NativeKeyboardTest
 cd NativeKeyboardTest
 cordova platform add ios
 cordova plugin add ../../cordova-plugin-native-keyboard/cordova-plugin-native-keyboard
-cp {{ path to }}/cordova-plugin-native-keyboard/demo/index.html www/
+cp ../../cordova-plugin-native-keyboard/cordova-plugin-native-keyboard/demo/index.html www/
 cordova run ios
 ```
 
