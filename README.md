@@ -7,9 +7,9 @@ __March 22 '16__: Work in progress. This is a huge effort to get right so please
 
 __March 26 '16__: Still work in progress, but the messenger component is nearing completion. Check out the screenshots below. 
 
-__April 2 '16__: Nearing completion - [please join the BETA TEST here](#1)!
+__April 2 '16__: Nearing completion - [please join the BETA TEST here](https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/issues/1)!
 
-__April 8 '16__: Refactored a lot because of a few issues reported. Should be a lot better now. [Update 0.2.0 posted in the BETA TEST issue!](#1)
+__April 8 '16__: Fixed a few important issues. Should be a lot better now. [Update 0.2.0 posted in the BETA TEST issue!](https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/issues/1)
 
 <img src="screenshots/messenger-1.png" width="350px"/>&nbsp;&nbsp;&nbsp;
 <img src="screenshots/messenger-2.png" width="350px"/>
