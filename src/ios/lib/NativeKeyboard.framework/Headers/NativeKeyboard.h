@@ -1,6 +1,8 @@
 #import "NativeKeyboardHelper.h"
+#import "NKTextInput.h"
+#import "NKTextField.h"
+#import "NKTextView.h"
 #import "FontResolver.h"
-//#import "FontRegistry.h"
 #import "SLKTextViewController.h"
 #import "SLKTextInputbar.h"
 #import "SLKTextView.h"
@@ -14,7 +16,6 @@
 #import "SLKInputAccessoryView.h"
 #import "UIImage+FontAwesome.h"
 #import "UIResponder+SLKAdditions.h"
-//#import "FontInspector.h"
 #import "IonIcons.h"
 
 //! Project version number for NativeKeyboard.

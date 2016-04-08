@@ -1,9 +1,10 @@
 #import <Cordova/CDV.h>
 #import <NativeKeyboard/NativeKeyboard.h>
 
-@interface CDVNativeKeyboard : CDVPlugin<UITextViewDelegate, UIScrollViewDelegate, NSLayoutManagerDelegate>
+@interface CDVNativeKeyboard : CDVPlugin<UITextViewDelegate, UITextFieldDelegate, UIScrollViewDelegate, NSLayoutManagerDelegate>
 
-@property (nonatomic, strong) UITextView *textView;
+@property (nonatomic, strong) NKTextView *textView;
+@property (nonatomic, strong) NKTextField *textField;
 
 - (void)show:(CDVInvokedUrlCommand*)command;
 - (void)hide:(CDVInvokedUrlCommand*)command;

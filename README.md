@@ -10,7 +10,13 @@ Native Keyboard
 ## Quickstart
 Throw these in a Terminal window:
 
-__April 2 '16__: Nearing completion - [please let me know](mailto:eddyverbruggen@gmail.com) if you want to __BETA TEST__ this baby!
+```
+cordova create NativeKeyboardTest
+cd NativeKeyboardTest
+cordova platform add ios
+cordova plugin add ../../cordova-plugin-native-keyboard/cordova-plugin-native-keyboard
+cp {{ path to }}/cordova-plugin-native-keyboard/demo/index.html www/
+cordova run ios
+```
 
-<img src="screenshots/messenger-1.png" width="350px"/>&nbsp;&nbsp;&nbsp;
-<img src="screenshots/messenger-2.png" width="350px"/>
+See `demo/index.html` for all the available methods and properties.

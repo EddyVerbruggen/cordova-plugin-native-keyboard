@@ -12,17 +12,29 @@
 		<data>
 		8k+QETUIQeLmmnvGRJPXQwpLdQI=
 		</data>
+		<key>Headers/NKTextField.h</key>
+		<data>
+		2X9ikNPpTQ1/YEZ6s/8BiCdOcc4=
+		</data>
+		<key>Headers/NKTextInput.h</key>
+		<data>
+		y7V4jyOzsKnZVfSVmbnqGDYc9BQ=
+		</data>
+		<key>Headers/NKTextView.h</key>
+		<data>
+		9o6GhvIwdy8M7KNQWub56ztTGZU=
+		</data>
 		<key>Headers/NSString+FontAwesome.h</key>
 		<data>
 		gRTsSYoJAbemHCri1IiRvXQJM2U=
 		</data>
 		<key>Headers/NativeKeyboard.h</key>
 		<data>
-		2mtzZ+iNqWQc1Jpg4h0TJG9PWl4=
+		WorC0XM2RxHmYR4CxJolaWBu7C0=
 		</data>
 		<key>Headers/NativeKeyboardHelper.h</key>
 		<data>
-		qzDLq9H87JLpuUQ5CU7s//tD7z8=
+		Q8UTOjvw+ewKmZ8FnEeMlh1+y94=
 		</data>
 		<key>Headers/SLKInputAccessoryView.h</key>
 		<data>
@@ -78,7 +90,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		64KXmy0Z+KW0ODTWYD0kRzdDocc=
+		pn6aTH6/LEcwQg+R9tSjGm49O5s=
 		</data>
 		<key>LICENSE</key>
 		<data>
@@ -103,17 +115,29 @@
 		<data>
 		8k+QETUIQeLmmnvGRJPXQwpLdQI=
 		</data>
+		<key>Headers/NKTextField.h</key>
+		<data>
+		2X9ikNPpTQ1/YEZ6s/8BiCdOcc4=
+		</data>
+		<key>Headers/NKTextInput.h</key>
+		<data>
+		y7V4jyOzsKnZVfSVmbnqGDYc9BQ=
+		</data>
+		<key>Headers/NKTextView.h</key>
+		<data>
+		9o6GhvIwdy8M7KNQWub56ztTGZU=
+		</data>
 		<key>Headers/NSString+FontAwesome.h</key>
 		<data>
 		gRTsSYoJAbemHCri1IiRvXQJM2U=
 		</data>
 		<key>Headers/NativeKeyboard.h</key>
 		<data>
-		2mtzZ+iNqWQc1Jpg4h0TJG9PWl4=
+		WorC0XM2RxHmYR4CxJolaWBu7C0=
 		</data>
 		<key>Headers/NativeKeyboardHelper.h</key>
 		<data>
-		qzDLq9H87JLpuUQ5CU7s//tD7z8=
+		Q8UTOjvw+ewKmZ8FnEeMlh1+y94=
 		</data>
 		<key>Headers/SLKInputAccessoryView.h</key>
 		<data>

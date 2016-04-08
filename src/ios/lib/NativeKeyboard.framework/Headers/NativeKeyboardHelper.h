@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "NKTextInput.h"
 
 @interface NativeKeyboardHelper : NSObject
 
@@ -32,5 +33,8 @@ typedef NS_ENUM(NSInteger, NKFeature) {
 + (UIReturnKeyType) getUIReturnKeyType:(NSString*)type;
 + (UIBarButtonSystemItem) getUIBarButtonSystemItem:(NSString*)type;
 + (NSTextAlignment) getNSTextAlignment:(NSString*)type;
+
++ (void) applyCaretColor:(NSString*)hexColor toField:(UIControl<NKTextInput>*)field;
++ (void) applyFont:uiFont andTextAlignment:(NSString*)align toText:(NSString*)text withLineHeight:(double)lineHeight toField:(UIControl<NKTextInput>*)field;
 
 @end
