@@ -2,13 +2,14 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-native-keyboard"
-        version="0.5.0">
+        version="1.0.0">
 
-  <name>NativeKeyboard</name>
+  <name>Native Keyboard</name>
 
   <description>
-    This plugin allows you to tweak the iOS keyboard in many ways
-    previously only possible in native apps.
+    This plugin aims to solve common keyboard problems encountered with Cordova / PhoneGap apps.
+    The messenger component (see screenshots) is ready for production, but this plugin will have
+    more tricks up its sleeve. I'll document those once they're ready for primetime as well.
   </description>
 
   <author>Eddy Verbruggen</author>

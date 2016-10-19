@@ -1,3 +1,37 @@
 {
-
+  "name": "cordova-plugin-native-keyboard",
+  "version": "1.0.0",
+  "description": "This plugin aims to solve common keyboard problems encountered with Cordova / PhoneGap apps. The messenger component (see screenshots) is ready for production, but this plugin will have more tricks up its sleeve. I'll document those once they're ready for primetime as well.",
+  "cordova": {
+    "id": "cordova-plugin-native-keyboard",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard.git"
+  },
+  "keywords": [
+    "Keyboard",
+    "Native Keyboard",
+    "Messenger",
+    "Messenger Keyboard",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/issues"
+  },
+  "homepage": "https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard#readme"
 }
