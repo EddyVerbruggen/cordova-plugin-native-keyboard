@@ -12,6 +12,8 @@ typedef NS_ENUM(NSInteger, NKFeature) {
   NKFeatureAccessoryBar
 };
 
++ (BOOL) checkLicense;
+
 + (BOOL) allowFeature:(NKFeature)feature;
 
 + (UIColor *) colorFromHexString:(NSString *)hexString;

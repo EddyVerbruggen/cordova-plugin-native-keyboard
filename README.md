@@ -3,28 +3,29 @@ Native Keyboard
 
 <img src="nativekeyboard.png" width="80px"/>
 
-__March 22 '16__: Work in progress. This is a huge effort to get right so please be patient. Once it's done you will be able to fi. hide the keyboard accessory bar, or add a custom item to it. Or trigger any of the (about) 12 different native keyboard types the iOS SDK has to offer.
-
-__March 26 '16__: Still work in progress, but the messenger component is nearing completion. Check out the screenshots below. 
-
-__April 2 '16__: Nearing completion - [please join the BETA TEST here](https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/issues/1)!
-
-__April 8 '16__: Fixed a few important issues. Should be a lot better now. [Update 0.2.0 posted in the BETA TEST issue!](https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/issues/1)
-
 ## Screenshots
 <img src="screenshots/messenger-1.png" width="350px"/>&nbsp;&nbsp;&nbsp;
 <img src="screenshots/messenger-2.png" width="350px"/>
 
-## Quickstart
-Throw these in a Terminal window:
-
+## I wanna try it!
 ```
-cordova create NativeKeyboardTest
-cd NativeKeyboardTest
-cordova platform add ios
-cordova plugin add ../../cordova-plugin-native-keyboard/cordova-plugin-native-keyboard
-cp ../../cordova-plugin-native-keyboard/cordova-plugin-native-keyboard/demo/index.html www/
-cordova run ios
+$ cordova create nativekeyboardtest
+$ cd nativekeyboardtest
+$ cordova plugin add cordova-plugin-nativekeyboard
 ```
 
-See `demo/index.html` for all the available methods and properties.
+Now copy the contents of [our demo](demo/index.html) over `www/index.html`, and do one of these:
+
+```
+$ cordova run ios
+$ cordova run android
+```
+
+## I like it, hook me up!
+This plugin has been a BEAST to implement and its maintenance is killing me already
+so I need to make this a commercial offering to keep it afloat. If you have a compelling
+reason to not pay for an unlocked version let me know and we'll try to work out something.
+
+* Look up the ID of the app you want to use the plugin with - you can find it at the top of config.xml and is something like `io.cordova.hellocordova`.
+* Send $100 to [my PayPal account](https://www.paypal.me/EddyVerbruggen/100usd) and make sure to include your app ID.
+* You'll quickly receive a license key (and instructions) which you can use to install the plugin.

@@ -8,7 +8,8 @@ NSArray * _supportedOrientations;
 CGFloat _baseKeyboardHeight = 224; // fallback
 CGFloat _defaultContentHeight = 34;
 CGFloat _lastContentHeight = 34;
-BOOL _disableLefButtonWhenTextEntered;
+BOOL _disableLeftButtonWhenTextEntered;
+BOOL _keepOpenAfterSubmit;
 
 // copied from CDVViewController so the rotation isn't altered during/after using the SlackViewController
 #ifdef __IPHONE_9_0
@@ -64,8 +65,8 @@ BOOL _disableLefButtonWhenTextEntered;
 - (void)textDidUpdate:(BOOL)animated {
   // Notifies the view controller that the text did update.
   [super textDidUpdate:animated];
-  
-  if (_disableLefButtonWhenTextEntered) {
+
+  if (_disableLeftButtonWhenTextEntered) {
     [self.leftButton setEnabled:self.textView.text.length == 0];
   }
   // the initial position of the webview is the responsibility of the dev,
@@ -78,7 +79,7 @@ BOOL _disableLefButtonWhenTextEntered;
   if (height != _lastContentHeight) {
     CGFloat diff = height - _defaultContentHeight;
     //    [self.scrollView setContentOffset: CGPointMake(0, 400) animated:YES];
-    
+
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"contentHeight":[NSNumber numberWithFloat:height], @"contentHeightDiff":[NSNumber numberWithFloat:diff]}];
     pluginResult.keepCallback = [NSNumber numberWithBool:YES];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
@@ -97,7 +98,9 @@ BOOL _disableLefButtonWhenTextEntered;
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"messengerRightButtonPressed":@(YES), @"text":text}];
   pluginResult.keepCallback = [NSNumber numberWithBool:YES];
   [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
-  [self dismissKeyboard:YES];
+  if (!_keepOpenAfterSubmit) {
+    [self dismissKeyboard:YES];
+  }
   [super didPressRightButton:sender];
 }
 
@@ -115,7 +118,7 @@ BOOL _disableLefButtonWhenTextEntered;
   if (maxChars != nil) {
     self.textInputbar.maxCharCount = [maxChars intValue];
   }
-  
+
   // style the messageview
   self.textInputbar.textView.placeholder = options[@"placeholder"];
   NSString* placeholderColor = options[@"placeholderColor"];
@@ -131,30 +134,32 @@ BOOL _disableLefButtonWhenTextEntered;
     self.textInputbar.textView.layer.borderColor = [NativeKeyboardHelper colorFromHexString:textViewBorderColor].CGColor;
   }
   //  self.textInputbar.textView.pastableMediaTypes = SLKPastableMediaTypeAll;
-  
+
   //  [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
   self.bounces = YES;
   self.shakeToClearEnabled = NO;
   self.keyboardPanningEnabled = YES;
   self.shouldScrollToBottomAfterKeyboardShows = [options[@"scrollToBottomAfterKeyboardShows"] boolValue];
   self.inverted = NO;
-  
-  NSString* textViewContainerBackgroundColor = options[@"textViewContainerBackgroundColor"];
-  if (textViewContainerBackgroundColor != nil) {
-    self.textInputbar.backgroundColor = [NativeKeyboardHelper colorFromHexString:textViewContainerBackgroundColor];
+  _keepOpenAfterSubmit = [options[@"keepOpenAfterSubmit"] boolValue];
+
+
+  NSString* backgroundColor = options[@"backgroundColor"];
+  if (backgroundColor != nil) {
+    self.textInputbar.backgroundColor = [NativeKeyboardHelper colorFromHexString:backgroundColor];
   }
-  
+
   NSString *text = options[@"text"];
   self.textInputbar.textView.text = text;
   if (options[@"textColor"] != nil) {
     self.textInputbar.textView.textColor = [NativeKeyboardHelper colorFromHexString:options[@"textColor"]];
   }
-  
+
   // TODO feature-allowed check
   SLKCounterStyle slkCounterStyle = [NKSLKTextViewController getSLKCounterStyle:options[@"counterStyle"]];
   self.textInputbar.counterStyle = slkCounterStyle;
   self.textInputbar.counterPosition = SLKCounterPositionTop; // TODO pass in some day
-  
+
   if (options[@"type"] != nil) {
     if ([NativeKeyboardHelper allowFeature:NKFeatureKeyboardType]) {
       UIKeyboardType keyBoardType = [NativeKeyboardHelper getUIKeyboardType:options[@"type"]];
@@ -165,30 +170,52 @@ BOOL _disableLefButtonWhenTextEntered;
   if ([options[@"showKeyboard"] boolValue]) {
     [self presentKeyboard:YES];
   }
-  
+
   NSDictionary *leftButton = options[@"leftButton"];
-  if (leftButton != nil) {
-    _disableLefButtonWhenTextEntered = [leftButton[@"disabledWhenTextEntered"] boolValue];
+  if (![leftButton isKindOfClass:[NSNull class]] && leftButton != nil) {
+    _disableLeftButtonWhenTextEntered = [leftButton[@"disabledWhenTextEntered"] boolValue];
     NSString *type = leftButton[@"type"];
+    NSString *color = leftButton[@"color"];
+    if (color == nil) {
+      color = @"#007AFF"; // blue
+    }
     if ([@"fa" isEqualToString:type] || [@"fontawesome" isEqualToString:type]) {
-      [NativeKeyboardHelper setFAImage:leftButton[@"value"] onButton:self.leftButton withColor:leftButton[@"color"]];
+      [NativeKeyboardHelper setFAImage:leftButton[@"value"] onButton:self.leftButton withColor:color];
     } else if ([@"ion" isEqualToString:type] || [@"ionicon" isEqualToString:type]) {
-      [NativeKeyboardHelper setIonImage:leftButton[@"value"] onButton:self.leftButton withColor:leftButton[@"color"]];
+      [NativeKeyboardHelper setIonImage:leftButton[@"value"] onButton:self.leftButton withColor:color];
+    } else {
+      // 'text' type is not yet supported, see https://github.com/slackhq/SlackTextViewController/issues/457
+      NSLog(@"On iOS type 'text' is not supported (yet) on the left button.");
     }
   }
-  
+
   // change the label and color of the send button
   NSDictionary* rightButton = options[@"rightButton"];
-  if (rightButton != nil) {
+  if ([rightButton isKindOfClass:[NSNull class]] || rightButton == nil) {
+    NSLog(@"No rightButton configured, but it's a pretty useful thing to have really..");
+  } else {
     NSString *type = rightButton[@"type"];
     NSString *color = rightButton[@"color"];
+    if (color == nil) {
+      color = @"#007AFF"; // blue
+    }
     if ([@"text" isEqualToString:type]) {
       [self.rightButton setTitle:rightButton[@"value"] forState:UIControlStateNormal];
       if (color != nil) {
         [self.rightButton setTintColor:[NativeKeyboardHelper colorFromHexString:color]];
       }
+      NSString *textStyle = rightButton[@"textStyle"];
+      if ([textStyle isKindOfClass:[NSNull class]] || textStyle == nil || [@"normal" isEqualToString:textStyle]) {
+        self.rightButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
+      } else if ([@"bold" isEqualToString:textStyle]) {
+        self.rightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
+      } else if ([@"italic" isEqualToString:textStyle]) {
+        self.rightButton.titleLabel.font = [UIFont italicSystemFontOfSize:15.0];
+      }
     } else if ([@"fa" isEqualToString:type] || [@"fontawesome" isEqualToString:type]) {
       [NativeKeyboardHelper setFAImage:rightButton[@"value"] onButton:self.rightButton withColor:color];
+    } else if ([@"ion" isEqualToString:type] || [@"ionicon" isEqualToString:type]) {
+      [NativeKeyboardHelper setIonImage:rightButton[@"value"] onButton:self.rightButton withColor:color];
     }
     [self.rightButton setEnabled:text.length > 0];
   }

@@ -5,6 +5,7 @@
 #import "FontResolver.h"
 #import "SLKTextViewController.h"
 #import "SLKTextInputbar.h"
+#import "SLKTextInput.h"
 #import "SLKTextView.h"
 #import "SLKTypingIndicatorView.h"
 #import "SLKTypingIndicatorProtocol.h"

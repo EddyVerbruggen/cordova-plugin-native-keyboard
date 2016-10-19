@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-native-keyboard"
-        version="0.2.0">
+        version="0.5.0">
 
   <name>NativeKeyboard</name>
 
@@ -21,15 +21,42 @@
 
   <issue>https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/issues</issue>
 
+  <!-- Not setting this means you'll need to kill and restart your app after 5 minutes of use to use the plugin again -->
+  <preference name="LICENSE" default="TRIAL" />
+
   <engines>
     <engine name="cordova" version=">=3.0.0"/>
   </engines>
 
-  <platform name="ios">
-    <js-module src="www/NativeKeyboard.js" name="NativeKeyboard">
-      <clobbers target="window.NativeKeyboard" />
-    </js-module>
+  <js-module src="www/NativeKeyboard.js" name="NativeKeyboard">
+    <clobbers target="window.NativeKeyboard" />
+  </js-module>
 
+  <platform name="android">
+    <config-file parent="/*" target="res/xml/config.xml">
+      <feature name="NativeKeyboard">
+        <param name="android-package" value="nl.xservices.plugins.nativekeyboard.NativeKeyboard" />
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+
+    <lib-file src="src/android/lib/nativekeyboard.jar" />
+
+    <source-file src="src/android/NativeKeyboard.java" target-dir="src/nl/xservices/plugins/nativekeyboard" />
+
+    <source-file src="src/android/res/values/font_awesome.xml" target-dir="res/values" />
+    <source-file src="src/android/res/drawable/cursor.xml" target-dir="res/drawable" />
+
+    <source-file src="src/android/assets/fonts/fontawesome-webfont.ttf" target-dir="assets/fonts" />
+    <source-file src="src/android/assets/fonts/ionicons.ttf" target-dir="assets/fonts" />
+
+    <source-file src="src/android/res/values/nativekeyboard.xml" target-dir="res/values" />
+    <config-file target="res/values/nativekeyboard.xml" parent="/*">
+      <string name="NativeKeyboardPluginLicense">$LICENSE</string>
+    </config-file>
+  </platform>
+
+  <platform name="ios">
     <config-file target="config.xml" parent="/*">
       <feature name="NativeKeyboard">
         <param name="ios-package" value="CDVNativeKeyboard"/>
@@ -46,15 +73,17 @@
     <framework src="src/ios/lib/NativeKeyboard.framework" custom="true" />
 
     <resource-file src="src/ios/FontAwesome.ttf" target="FontAwesome.ttf" />
-    <resource-file src="src/ios/ionicons.ttf" target="ionicons.ttf" />
+    <resource-file src="src/ios/lib/NativeKeyboard.framework/ionicons.bundle" />
+
     <config-file target="*-Info.plist" parent="UIAppFonts">
       <array>
         <string>FontAwesome.ttf</string>
-        <string>ionicons.ttf</string>
       </array>
     </config-file>
     
-    <!--<hook type="after_plugin_install" src="src/ios/hooks/somethingsomething.js"/>-->
+    <config-file target="*-Info.plist" parent="NativeKeyboardPluginLicense">
+      <string>$LICENSE</string>
+    </config-file>
   </platform>
 
 </plugin>
