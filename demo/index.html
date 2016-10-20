@@ -159,7 +159,7 @@
       },
       scrollToBottomAfterMessengerShows: true,
       autoscrollElement: document.getElementById("messages"), // default unset
-      keepOpenAfterSubmit: false, // default false
+      keepOpenAfterSubmit: true, // default false
       animated: true,
       placeholder: 'Type your message..',
       placeholderColor: "#DDDDDD",
@@ -178,7 +178,19 @@
         textStyle: 'normal', // if type is 'text', you can set this to 'normal' (default), 'bold', 'italic'
         disabledWhenTextEntered: false, // default false
         onPress: function () {
-          alert("Left button pressed - showing an ActionSheet would seem appropriate now.");
+          if (window.plugins && window.plugins.actionsheet) {
+            window.plugins.actionsheet.show({
+              androidTheme: window.plugins.actionsheet.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT,
+              buttonLabels: ['Take Photo or Video', 'Use Last Photo Taken', 'Choose From Library'],
+              addCancelButtonWithLabel: 'Cancel'
+            }, function(index) {
+              if (index != 4) { // which is 'cancel'
+                console.log("Picked index " + index + ".. you'll need to implement the rest yourself ;)");
+              }
+            });
+          } else {
+            alert("Left button pressed - if you install cordova-plugin-actionsheet you'll see a nice ActionSheet in this demo.");
+          }
         }
       },
       rightButton: {
