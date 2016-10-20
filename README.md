@@ -28,7 +28,14 @@ $ cd nativekeyboardtest
 $ cordova plugin add cordova-plugin-nativekeyboard
 ```
 
-Now copy the contents of [our demo](demo/index.html) over `www/index.html`, and do one of these:
+.. and for a nicer demo experience you'll also want to add these plugins:
+
+```
+$ cordova plugin add cordova-plugin-console
+$ cordova plugin add cordova-plugin-actionsheet
+```
+
+.. now copy the contents of [our demo](demo/index.html) over `www/index.html`, and do one of these:
 
 ```
 $ cordova run ios
