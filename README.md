@@ -68,7 +68,7 @@ TABEL HIER, met iOS/Android checkbox kolommen
 |`placeholderColor`|`#CCCCCC`|yes|yes|The color of the placeholder text.
 |`backgroundColor`|`#F6F6F6`|yes|yes|The background color of the messenger bar.
 |`textViewBackgroundColor`|`#F6F6F6`|yes|yes|The background color of the textview. Looks nicest on Android if it's the same color as the `backgroundColor` property.
-|`maxChars`|unlimited|yes|yes|Setting this > 0 will make a counter show up on iOS (and ignore superfluous input on Android, for now)
+|`maxChars`||yes|limited|Setting this > 0 will make a counter show up on iOS (and ignore superfluous input on Android, for now)
 |`counterStyle`|"none"|yes|no|Options are: "none", "split", "countdown", "countdownreversed". Note that if `maxChars` is set, "none" will still show a counter.
 |`leftButton`||yes|yes|See below
 |`rightButton`||yes|yes|See below
@@ -80,7 +80,7 @@ As shown in the video's it's common to present these options as an ActionSheet, 
 
 |option|default|iOS|Android|description
 |---|---|---|---|---
-|`type`||yes|yes|Either "text" (Android only currently), "fontawesome" or "ionicon".
+|`type`||yes|limited|Either "text" (Android only currently), "fontawesome" or "ionicon".
 |`value`||yes|yes|Depends on the `type`. Examples: for "text" use "Send", for "fontawesome" use "fa-battery-quarter", for "ionicon" use "\uf48a" (go to http://ionicons.com, right-click and inspect the icon and use the value you find in `:before`). Note that some fonticons are not supported as the embedded fonts in the plugin may lag behind a little. So try one of the older icons first.
 |`textStyle`|"normal"|yes|yes|If `type` is "text" you can set this to either "normal", "bold" or "italic".
 |`disabledWhenTextEntered`|`false`|yes|yes|Set to `true` to disable the button once text has been entered.
