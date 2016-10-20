@@ -9,7 +9,7 @@ Native Keyboard
 <img src="media/videos/iOS/messenger.gif" height="716px"/>&nbsp;&nbsp;&nbsp;
 <img src="media/videos/Android/messenger.gif" height="716px"/>
 
-_Video's of iOS and Android running the included demo app._
+_Video's of iOS and Android running the included [demo app](demo/index.html)._
 
 ## So it's just a fancy keyboard?
 You're damn right it is! 👍
@@ -50,9 +50,6 @@ NativeKeyboard.showMessenger({
 ```
 
 There are however __many__ options you can pass in to tweak the appearance and behavior:
-
-TABEL HIER, met iOS/Android checkbox kolommen
-
 
 |option|default|iOS|Android|description
 |---|---|---|---|---
