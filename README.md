@@ -56,22 +56,22 @@ TABEL HIER, met iOS/Android checkbox kolommen
 
 |option|default|iOS|Android|description
 |---|---|---|---|---
-|`onSubmit`||[x]|[x]|A function invoked when the user submits his input. Receives the text as a single property. Make sure your page is UTF-8 encoded so Chinese and Emoji are rendered OK.
-|`onKeyboardDidShow`||[x]|[x]|A function invoked when the keyboard popped up. Receives the height as a single property.
-|`onKeyboardDidHide`||[x]|[x]|A function invoked when the keyboard closed.
-|`autoscrollElement`||[x]|[x]|Highly recommended to pass in if you want to replicate the behavior of the video's above (scroll down when the keyboard opens). Pass in the scrollable DOM element containing the messages, so something like `document.getElementById("messageList")`.
-|`scrollToBottomAfterMessengerShows`||[x]|[x]|If `autoscrollElement` was set you can also make the list scroll down initially, when the messenger bar (without the keyboard popping up) is shown.
-|`keepOpenAfterSubmit`|`false`|[x]|[x]|Setting this to `true` is like the video's above: the keyboard doesn't close upon submit.
-|`animated`|`false`|[x]|[x]|Makes the messenger bar slide in from the bottom.
-|`textColor`|`#444444`|[x]|[x]|The color of the typed text.
-|`placeholder`||[x]|[x]|Like a regular HTML input placeholder.
-|`placeholderColor`|`#CCCCCC`|[x]|[x]|The color of the placeholder text.
-|`backgroundColor`|`#F6F6F6`|[x]|[x]|The background color of the messenger bar.
-|`textViewBackgroundColor`|`#F6F6F6`|[x]|[x]|The background color of the textview. Looks nicest on Android if it's the same color as the `backgroundColor` property.
-|`maxChars`|unlimited|[x]|[x]|Setting this > 0 will make a counter show up on iOS (and ignore superfluous input on Android, for now)
-|`counterStyle`|"none"|[x]|[ ]|Options are: "none", "split", "countdown", "countdownreversed". Note that if `maxChars` is set, "none" will still show a counter.
-|`leftButton`||[x]|[x]|See below
-|`rightButton`||[x]|[x]|See below
+|`onSubmit`||yes|yes|A function invoked when the user submits his input. Receives the text as a single property. Make sure your page is UTF-8 encoded so Chinese and Emoji are rendered OK.
+|`onKeyboardDidShow`||yes|yes|A function invoked when the keyboard popped up. Receives the height as a single property.
+|`onKeyboardDidHide`||yes|yes|A function invoked when the keyboard closed.
+|`autoscrollElement`||yes|yes|Highly recommended to pass in if you want to replicate the behavior of the video's above (scroll down when the keyboard opens). Pass in the scrollable DOM element containing the messages, so something like `document.getElementById("messageList")`.
+|`scrollToBottomAfterMessengerShows`||yes|yes|If `autoscrollElement` was set you can also make the list scroll down initially, when the messenger bar (without the keyboard popping up) is shown.
+|`keepOpenAfterSubmit`|`false`|yes|yes|Setting this to `true` is like the video's above: the keyboard doesn't close upon submit.
+|`animated`|`false`|yes|yes|Makes the messenger bar slide in from the bottom.
+|`textColor`|`#444444`|yes|yes|The color of the typed text.
+|`placeholder`||yes|yes|Like a regular HTML input placeholder.
+|`placeholderColor`|`#CCCCCC`|yes|yes|The color of the placeholder text.
+|`backgroundColor`|`#F6F6F6`|yes|yes|The background color of the messenger bar.
+|`textViewBackgroundColor`|`#F6F6F6`|yes|yes|The background color of the textview. Looks nicest on Android if it's the same color as the `backgroundColor` property.
+|`maxChars`|unlimited|yes|yes|Setting this > 0 will make a counter show up on iOS (and ignore superfluous input on Android, for now)
+|`counterStyle`|"none"|yes|no|Options are: "none", "split", "countdown", "countdownreversed". Note that if `maxChars` is set, "none" will still show a counter.
+|`leftButton`||yes|yes|See below
+|`rightButton`||yes|yes|See below
 
 #### leftButton
 The button on the left is optional and can be used to for instance make a picture, grab a picture from the camera role, shoot a video, .. whatever you fancy, really as the implementation is entirely up to you.
@@ -80,21 +80,21 @@ As shown in the video's it's common to present these options as an ActionSheet, 
 
 |option|default|iOS|Android|description
 |---|---|---|---|---
-|`type`||[x]|[x]|Either "text" (Android only currently), "fontawesome" or "ionicon".
-|`value`||[x]|[x]|Depends on the `type`. Examples: for "text" use "Send", for "fontawesome" use "fa-battery-quarter", for "ionicon" use "\uf48a" (go to http://ionicons.com, right-click and inspect the icon and use the value you find in `:before`). Note that some fonticons are not supported as the embedded fonts in the plugin may lag behind a little. So try one of the older icons first.
-|`textStyle`|"normal"|[x]|[x]|If `type` is "text" you can set this to either "normal", "bold" or "italic".
-|`disabledWhenTextEntered`|`false`|[x]|[x]|Set to `true` to disable the button once text has been entered.
-|`onPress`||[x]|[x]|A function invoked when the button is pressed. Use this button to prompt the user what he wants to do next by for instance rendering an ActionSheet.
+|`type`||yes|yes|Either "text" (Android only currently), "fontawesome" or "ionicon".
+|`value`||yes|yes|Depends on the `type`. Examples: for "text" use "Send", for "fontawesome" use "fa-battery-quarter", for "ionicon" use "\uf48a" (go to http://ionicons.com, right-click and inspect the icon and use the value you find in `:before`). Note that some fonticons are not supported as the embedded fonts in the plugin may lag behind a little. So try one of the older icons first.
+|`textStyle`|"normal"|yes|yes|If `type` is "text" you can set this to either "normal", "bold" or "italic".
+|`disabledWhenTextEntered`|`false`|yes|yes|Set to `true` to disable the button once text has been entered.
+|`onPress`||yes|yes|A function invoked when the button is pressed. Use this button to prompt the user what he wants to do next by for instance rendering an ActionSheet.
 
 #### rightButton
 The button on the right is used to submit the entered text. You don't need to configure this at all if you're happy with the default "Send" label as the entered text itself will be emitted through the `onSubmit` callback.
 
 |option|default|iOS|Android|description
 |---|---|---|---|---
-|`type`|"text"|[x]|[x]|Either "text", "fontawesome" or "ionicon".
-|`value`|"Send"|[x]|[x]|See the description of `leftButton.value`.
-|`textStyle`|"normal"|[x]|[x]|See the description of `leftButton.textStyle`.
-|`onPress`||[x]|[x]|A function invoked when the button is pressed. Use this to for instance hide the messenger entirely after text was entered by calling `NativeKeyboard.hideMessenger()`.
+|`type`|"text"|yes|yes|Either "text", "fontawesome" or "ionicon".
+|`value`|"Send"|yes|yes|See the description of `leftButton.value`.
+|`textStyle`|"normal"|yes|yes|See the description of `leftButton.textStyle`.
+|`onPress`||yes|yes|A function invoked when the button is pressed. Use this to for instance hide the messenger entirely after text was entered by calling `NativeKeyboard.hideMessenger()`.
 
 
 ### `hideMessenger`
