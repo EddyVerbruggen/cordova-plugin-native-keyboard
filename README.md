@@ -25,7 +25,7 @@ Open a command prompt and do:
 ```
 $ cordova create nativekeyboardtest
 $ cd nativekeyboardtest
-$ cordova plugin add cordova-plugin-nativekeyboard
+$ cordova plugin add cordova-plugin-native-keyboard
 ```
 
 .. and for a nicer demo experience you'll also want to add these plugins:
