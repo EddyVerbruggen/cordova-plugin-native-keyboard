@@ -1,6 +1,8 @@
 Native Keyboard
 ===============
 
+TODO niceify
+
 This plugin aims to solve common keyboard problems encountered with Cordova / PhoneGap apps.
 The messenger component (see screenshots) is ready for production, but this plugin will have
 more tricks up its sleeve. I'll document those once they're ready for primetime as well.

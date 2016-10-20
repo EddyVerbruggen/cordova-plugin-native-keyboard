@@ -5,7 +5,7 @@
 
 BOOL DEBUG_KEYBOARD = NO;
 
-// TODO move this to the framwework and wire the Cordova-SLK stuff via the NKHelper class
+// TODO move as much as possible to the helper, and move this to the framwework and wire the Cordova-SLK stuff via the NKHelper class
 NKSLKTextViewController * tvc;
 
 UIToolbar * toolBar;
@@ -20,7 +20,7 @@ int maxlength;
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(keyboardWasShown:)
                                                name:UIKeyboardDidShowNotification object:nil];
-  
+
   // for the textField
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(textFieldDidChange:)
@@ -45,9 +45,9 @@ int maxlength;
   self.textField = [NKTextField new];
   [self.textField configure:DEBUG_KEYBOARD];
   self.textField.delegate = self;
-  
+
   toolBar = [UIToolbar new];
-  
+
   [self registerForKeyboardNotifications];
 }
 
@@ -65,7 +65,7 @@ int maxlength;
     // TODO error callback (errorlog must be done in featurecheck)
     return;
   }
-  
+
   NSDictionary* options = [command argumentAtIndex:0];
 
   [self.textView removeFromSuperview];
@@ -75,16 +75,26 @@ int maxlength;
                                                 withCommand:command
                                          andCommandDelegate:self.commandDelegate];
 
-  NSArray * ors = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
-  NSArray * suppOrientations = [((CDVViewController*)self.viewController) parseInterfaceOrientations:ors];
-  [tvc setSupportedInterfaceOrientations:suppOrientations];
-    
-  // if a backgroundcolor is passed in, use that (TODO), otherwise use the webview bgcolor
-  tvc.view.backgroundColor = self.webView.backgroundColor;
-  
-  [tvc setTextInputbarHidden:YES animated:NO];
-  [self.viewController.view addSubview:tvc.view];
-  [tvc setTextInputbarHidden:NO animated:[options[@"animated"] boolValue]];
+  if (tvc != nil) {
+    NSArray * ors = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
+    NSArray * suppOrientations = [((CDVViewController*)self.viewController) parseInterfaceOrientations:ors];
+    [tvc setSupportedInterfaceOrientations:suppOrientations];
+
+    // if a backgroundcolor is passed in, use that (TODO), otherwise use the webview bgcolor
+    tvc.view.backgroundColor = self.webView.backgroundColor;
+
+    [tvc setTextInputbarHidden:YES animated:NO];
+    [self.viewController.view addSubview:tvc.view];
+    [tvc setTextInputbarHidden:NO animated:[options[@"animated"] boolValue]];
+
+    if ([options[@"scrollToBottomAfterMessengerShows"] boolValue]) {
+      [self.webView.scrollView scrollRectToVisible:CGRectInfinite animated:YES];
+    }
+
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"ready":@(YES)}];
+    pluginResult.keepCallback = [NSNumber numberWithBool:YES];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  }
 }
 
 - (void)hideMessenger:(CDVInvokedUrlCommand*)command {
@@ -104,6 +114,12 @@ int maxlength;
   }];
  */
 - (void)show:(CDVInvokedUrlCommand*)command {
+  if (![NativeKeyboardHelper checkLicense]) {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No valid license found; usage of the native keyboard plugin is restricted to 5 minutes."];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    return;
+  }
+
   NSDictionary* options = [command argumentAtIndex:0];
   wasTextarea = textarea;
   textarea = [@"textarea" isEqualToString:options[@"type"]];

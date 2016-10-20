@@ -54,8 +54,8 @@ BOOL _keepOpenAfterSubmit;
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"keyboardDidShow":@(YES), @"keyboardHeight":[NSNumber numberWithFloat:_baseKeyboardHeight+_lastContentHeight]}];
     pluginResult.keepCallback = [NSNumber numberWithBool:YES];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
-  } else if (SLKKeyboardStatusWillHide == status) {
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"keyboardWillHide":@(YES)}];
+  } else if (SLKKeyboardStatusDidHide == status) {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"keyboardDidHide":@(YES)}];
     pluginResult.keepCallback = [NSNumber numberWithBool:YES];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
   }
@@ -94,6 +94,11 @@ BOOL _keepOpenAfterSubmit;
 }
 
 - (void)didPressRightButton:(id)sender {
+  if (![NativeKeyboardHelper checkLicense]) {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No valid license found; usage of the native keyboard plugin is restricted to 5 minutes."];
+    [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
+    return;
+  }
   NSString *text = self.textInputbar.textView.text;
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"messengerRightButtonPressed":@(YES), @"text":text}];
   pluginResult.keepCallback = [NSNumber numberWithBool:YES];
@@ -105,6 +110,13 @@ BOOL _keepOpenAfterSubmit;
 }
 
 - (instancetype)initWithScrollView:(UIScrollView *)scrollView withCommand:(CDVInvokedUrlCommand*)command andCommandDelegate:(id <CDVCommandDelegate>)commandDelegate {
+
+  if (![NativeKeyboardHelper checkLicense]) {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No valid license found; usage of the native keyboard plugin is restricted to 5 minutes."];
+    [commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    return nil;
+  }
+
   self = [super initWithScrollView:scrollView];
   _commandDelegate = commandDelegate;
   _command = command;
