@@ -9,7 +9,7 @@ Native Keyboard
 <img src="media/videos/iOS/messenger.gif" height="716px"/>&nbsp;&nbsp;&nbsp;
 <img src="media/videos/Android/messenger.gif" height="716px"/>
 
-_Video's of iOS and Android running the included [demo app](demo/index.html)._
+_Videos of iOS and Android running the [included demo app](demo/index.html)._
 
 ## So it's just a fancy keyboard?
 You're damn right it is! 👍
@@ -17,7 +17,7 @@ You're damn right it is! 👍
 A cross platform WhatsApp / Messenger / Slack -style keyboard even. For _your_ Cordova app.
 
 ## Cool, but does it scale?
-Lol wut?
+Lol.. wut?
 
 ## OK, let me try this..
 Open a command prompt and do:
@@ -43,7 +43,7 @@ $ cordova run android
 ```
 
 ## I'm no dummy, gimme details man!
-ok ok OK! The plugin is currently entirely focused on the messenger component, but this will extend into [other areas](https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/issues/1) in the future. With that being said, this is the current awesome API:
+ok ok - OK! The plugin is currently entirely focused on the messenger component, but this will extend into [other areas](https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/issues/1) in the future. With that being said, this is the current awesome API:
 
 ### `showMessenger`
 The bare minimum you need to show the messenger and do something useful with the text a user typed is this (make sure you wait for `deviceready` to fire):
@@ -111,10 +111,10 @@ NativeKeyboard.hideMessenger({
 ```
 
 ## I like it, hook me up!
-This plugin has been a BEAST to implement and its maintenance is killing me already so I need to make this a commercial offering to keep it afloat. If you have a compelling reason to not pay for an unlocked version let me know and we'll work something out.
+This plugin has been a BEAST to implement and its maintenance is killing me already so I need to make this a commercial offering (with a __free trial__, see below) to keep it afloat. If you have a compelling reason to not pay for an unlocked version let me know and we'll work something out.
 
 * Look up the ID of the app you want to use the plugin with - you can find it at the top of config.xml and is something like `io.cordova.hellocordova`.
-* Send a __one-time__ fee of $ 199 to [my PayPal account](https://www.paypal.me/EddyVerbruggen/199usd) and make sure to include your app ID.
+* Send a one-time fee of $ 199 to [my PayPal account](https://www.paypal.me/EddyVerbruggen/199usd) and make sure to include your app ID.
 * You'll quickly receive a license key (and instructions) which you can use to install the plugin.
 * You can now forever use this version and any future version of this plugin for this app without restrictions.
 
