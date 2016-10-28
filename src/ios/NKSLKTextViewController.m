@@ -71,7 +71,7 @@ BOOL _keepOpenAfterSubmit;
   }
   // the initial position of the webview is the responsibility of the dev,
   // but we'll reposition it if the contentarea grows/shrinks
-  CGFloat height = self.textInputbar.textView.frame.size.height;
+  CGFloat height = self.textView.frame.size.height;
   if (_defaultContentHeight == 0) {
     _defaultContentHeight = height;
     _lastContentHeight = height;
@@ -99,7 +99,7 @@ BOOL _keepOpenAfterSubmit;
     [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
     return;
   }
-  NSString *text = self.textInputbar.textView.text;
+  NSString *text = self.textView.text;
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"messengerRightButtonPressed":@(YES), @"text":text}];
   pluginResult.keepCallback = [NSNumber numberWithBool:YES];
   [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
@@ -132,20 +132,20 @@ BOOL _keepOpenAfterSubmit;
   }
 
   // style the messageview
-  self.textInputbar.textView.placeholder = options[@"placeholder"];
+  self.textView.placeholder = options[@"placeholder"];
   NSString* placeholderColor = options[@"placeholderColor"];
   if (placeholderColor != nil) {
-    self.textInputbar.textView.placeholderColor = [NativeKeyboardHelper colorFromHexString:placeholderColor];
+    self.textView.placeholderColor = [NativeKeyboardHelper colorFromHexString:placeholderColor];
   }
   NSString* textViewBackgroundColor = options[@"textViewBackgroundColor"];
   if (textViewBackgroundColor != nil) {
-    self.textInputbar.textView.backgroundColor = [NativeKeyboardHelper colorFromHexString:textViewBackgroundColor];
+    self.textView.backgroundColor = [NativeKeyboardHelper colorFromHexString:textViewBackgroundColor];
   }
   NSString* textViewBorderColor = options[@"textViewBorderColor"];
   if (textViewBorderColor != nil) {
-    self.textInputbar.textView.layer.borderColor = [NativeKeyboardHelper colorFromHexString:textViewBorderColor].CGColor;
+    self.textView.layer.borderColor = [NativeKeyboardHelper colorFromHexString:textViewBorderColor].CGColor;
   }
-  //  self.textInputbar.textView.pastableMediaTypes = SLKPastableMediaTypeAll;
+  //  self.textView.pastableMediaTypes = SLKPastableMediaTypeAll;
 
   //  [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
   self.bounces = YES;
@@ -155,16 +155,15 @@ BOOL _keepOpenAfterSubmit;
   self.inverted = NO;
   _keepOpenAfterSubmit = [options[@"keepOpenAfterSubmit"] boolValue];
 
-
   NSString* backgroundColor = options[@"backgroundColor"];
   if (backgroundColor != nil) {
     self.textInputbar.backgroundColor = [NativeKeyboardHelper colorFromHexString:backgroundColor];
   }
 
   NSString *text = options[@"text"];
-  self.textInputbar.textView.text = text;
+  self.textView.text = text;
   if (options[@"textColor"] != nil) {
-    self.textInputbar.textView.textColor = [NativeKeyboardHelper colorFromHexString:options[@"textColor"]];
+    self.textView.textColor = [NativeKeyboardHelper colorFromHexString:options[@"textColor"]];
   }
 
   // TODO feature-allowed check
@@ -175,8 +174,20 @@ BOOL _keepOpenAfterSubmit;
   if (options[@"type"] != nil) {
     if ([NativeKeyboardHelper allowFeature:NKFeatureKeyboardType]) {
       UIKeyboardType keyBoardType = [NativeKeyboardHelper getUIKeyboardType:options[@"type"]];
-      [self.textInputbar.textView setKeyboardType:keyBoardType];
+      [self.textView setKeyboardType:keyBoardType];
     }
+  } else {
+    // IMO this is better than the default (UIKeyboardTypeTwitter)
+    [self.textView setKeyboardType:UIKeyboardTypeDefault];
+  }
+
+  if (options[@"appearance"] != nil && [@"dark" isEqualToString:options[@"appearance"]]) {
+    self.textView.keyboardAppearance = UIKeyboardAppearanceDark;
+  }
+
+  if ([options[@"secure"] boolValue]) {
+    // this is currently the only way to keep the 'Predictive text' bar away, but also disables Emoji entry
+    self.textView.secureTextEntry = YES;
   }
 
   if ([options[@"showKeyboard"] boolValue]) {
