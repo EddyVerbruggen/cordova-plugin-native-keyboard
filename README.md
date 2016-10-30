@@ -122,4 +122,4 @@ This plugin has been a BEAST to implement and its maintenance is killing me alre
 * You can now forever use this version and any future version of this plugin for this app without restrictions.
 
 ## I heard about a trial!?
-ALL features are available without a license, but you'll be restricted to 5 minutes of usage. Just kill and relaunch the app if you need more time ;)
+ALL features are available without a license, but you'll be restricted to 5 minutes of usage. Just indefinitely kill and relaunch the app if you need more time ;)
