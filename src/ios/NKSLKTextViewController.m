@@ -129,6 +129,9 @@ BOOL _keepOpenAfterSubmit;
   NSNumber* maxChars = options[@"maxChars"];
   if (maxChars != nil) {
     self.textInputbar.maxCharCount = [maxChars intValue];
+  } else {
+    // limitless
+    self.textInputbar.maxCharCount = 0;
   }
 
   // style the messageview
