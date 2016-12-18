@@ -63,6 +63,7 @@ There are however __many__ options you can pass in to tweak the appearance and b
 |`onSubmit`||yes|yes|A function invoked when the user submits his input. Receives the text as a single property. Make sure your page is UTF-8 encoded so Chinese and Emoji are rendered OK.
 |`onKeyboardDidShow`||yes|yes|A function invoked when the keyboard popped up. Receives the height as a single property.
 |`onKeyboardDidHide`||yes|yes|A function invoked when the keyboard closed.
+|`onTextChanged`||yes|yes|A function invoked when any key is pressed, sends the entire text as response.
 |`autoscrollElement`||yes|yes|Highly recommended to pass in if you want to replicate the behavior of the video's above (scroll down when the keyboard opens). Pass in the scrollable DOM element containing the messages, so something like `document.getElementById("messageList")`.
 |`scrollToBottomAfterMessengerShows`||yes|yes|If `autoscrollElement` was set you can also make the list scroll down initially, when the messenger bar (without the keyboard popping up) is shown.
 |`keepOpenAfterSubmit`|`false`|yes|yes|Setting this to `true` is like the video's above: the keyboard doesn't close upon submit.

@@ -61,10 +61,19 @@ BOOL _keepOpenAfterSubmit;
   }
 }
 
-// you can update JS on every keypress, but it makes more sense to send back the result when the rightbutton is pressed -- however it would be nice to pass back th grow height so the webview can move a bit -- or perhaps we can do that ourselves here, based on the contentheight etc.. if it's more than half the screen move it down
+// you can update JS on every keypress, but it makes more sense to send back the result when the rightbutton is pressed -- however it would be nice to pass back the grow height so the webview can move a bit -- or perhaps we can do that ourselves here, based on the contentheight etc.. if it's more than half the screen, move it down
 - (void)textDidUpdate:(BOOL)animated {
   // Notifies the view controller that the text did update.
   [super textDidUpdate:animated];
+
+  NSString *text = self.textView.text;
+  // need to escape these to be able to pass to the webview
+  if ([text isEqualToString:@"\n"]) {
+    text = @"\\n";
+  }
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"textChanged":text}];
+  pluginResult.keepCallback = [NSNumber numberWithBool:YES];
+  [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
 
   if (_disableLeftButtonWhenTextEntered) {
     [self.leftButton setEnabled:self.textView.text.length == 0];

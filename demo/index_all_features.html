@@ -157,6 +157,10 @@
       onKeyboardDidHide: function () {
         console.log("keyboard hidden");
       },
+      onTextChanged: function(newText) {
+        // every keystroke will be logged
+        console.log("text changed to: " + newText);
+      },
       autoscrollElement: document.getElementById("messages"), // default unset
       keepOpenAfterSubmit: false, // default false
       animated: true,

@@ -157,7 +157,10 @@
       onKeyboardDidHide: function () {
         console.log("keyboard hidden");
       },
-
+      onTextChanged: function(newText) {
+        // every keystroke will be logged
+        console.log("text changed to: " + newText);
+      },
       type: "twitter", // iOS only, default (default) | decimalpad | phonepad | numberpad | namephonepad | number | email | twitter | url | alphabet | search | ascii
       appearance: "light", // iOS only,  light (default) | dark
       secure: false, // iOS only,  default false, disables things like Emoji and Predicive text entry
