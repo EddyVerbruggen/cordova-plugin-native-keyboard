@@ -143,6 +143,8 @@ BOOL _keepOpenAfterSubmit;
     self.textInputbar.maxCharCount = 0;
   }
 
+  self.textView.text = options[@"text"];
+
   // style the messageview
   self.textView.placeholder = options[@"placeholder"];
   NSString* placeholderColor = options[@"placeholderColor"];

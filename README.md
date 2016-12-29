@@ -68,6 +68,7 @@ There are however __many__ options you can pass in to tweak the appearance and b
 |`scrollToBottomAfterMessengerShows`||yes|yes|If `autoscrollElement` was set you can also make the list scroll down initially, when the messenger bar (without the keyboard popping up) is shown.
 |`keepOpenAfterSubmit`|`false`|yes|yes|Setting this to `true` is like the video's above: the keyboard doesn't close upon submit.
 |`animated`|`false`|yes|yes|Makes the messenger bar slide in from the bottom.
+|`text`||yes|yes|The default text set in the messenger input bar.
 |`textColor`|`#444444`|yes|yes|The color of the typed text.
 |`placeholder`||yes|yes|Like a regular HTML input placeholder.
 |`placeholderColor`|`#CCCCCC`|yes|yes|The color of the placeholder text.
