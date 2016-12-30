@@ -47,11 +47,25 @@ BOOL _keepOpenAfterSubmit;
   _baseKeyboardHeight = height;
 }
 
+// The default is 'NO' which also means the 'keyboardWillHide' is not fired.
+// Note that for WKWebView users this will return 'NO' again, so that event is not fired.
+- (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder
+{
+  return [responder isKindOfClass:[UIWebView class]];
+}
+
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status {
   [super didChangeKeyboardStatus:status];
-  if (SLKKeyboardStatusDidShow == status) {
-    // TODO extract a convenience method for sending stuff back to JS
+  if (SLKKeyboardStatusWillShow == status) {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"keyboardWillShow":@(YES)}];
+    pluginResult.keepCallback = [NSNumber numberWithBool:YES];
+    [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
+  } else if (SLKKeyboardStatusDidShow == status) {
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"keyboardDidShow":@(YES), @"keyboardHeight":[NSNumber numberWithFloat:_baseKeyboardHeight+_lastContentHeight]}];
+    pluginResult.keepCallback = [NSNumber numberWithBool:YES];
+    [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
+  } else if (SLKKeyboardStatusWillHide == status) {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"keyboardWillHide":@(YES)}];
     pluginResult.keepCallback = [NSNumber numberWithBool:YES];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
   } else if (SLKKeyboardStatusDidHide == status) {

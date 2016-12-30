@@ -152,10 +152,13 @@
         appendMessage(text);
       },
       onKeyboardDidShow: function (height) {
-        console.log("keyboard shows, height is: " + height);
+        console.log("keyboard did show, height is: " + height);
+      },
+      onKeyboardWillHide: function () {
+        console.log("keyboard will hide");
       },
       onKeyboardDidHide: function () {
-        console.log("keyboard hidden");
+        console.log("keyboard did hide");
       },
       onTextChanged: function(newText) {
         // every keystroke will be logged
