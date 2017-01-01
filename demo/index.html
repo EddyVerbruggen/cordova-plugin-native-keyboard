@@ -151,6 +151,9 @@
         console.log("onSubmit: " + text);
         appendMessage(text);
       },
+      onKeyboardWillShow: function () {
+        console.log("keyboard will show");
+      },
       onKeyboardDidShow: function (height) {
         console.log("keyboard did show, height is: " + height);
       },
