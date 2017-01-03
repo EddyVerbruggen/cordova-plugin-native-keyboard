@@ -57,7 +57,7 @@ BOOL _keepOpenAfterSubmit;
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status {
   [super didChangeKeyboardStatus:status];
   if (SLKKeyboardStatusWillShow == status) {
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"keyboardWillShow":@(YES)}];
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"keyboardWillShow":@(YES), @"keyboardHeight":[NSNumber numberWithFloat:_baseKeyboardHeight+_lastContentHeight]}];
     pluginResult.keepCallback = [NSNumber numberWithBool:YES];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
   } else if (SLKKeyboardStatusDidShow == status) {

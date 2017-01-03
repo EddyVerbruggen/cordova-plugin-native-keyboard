@@ -61,7 +61,7 @@ There are however __many__ options you can pass in to tweak the appearance and b
 |option|default|iOS|Android|description
 |---|---|---|---|---
 |`onSubmit`||yes|yes|A function invoked when the user submits his input. Receives the text as a single property. Make sure your page is UTF-8 encoded so Chinese and Emoji are rendered OK.
-|`onKeyboardWillShow`||yes|no|A function invoked when the keyboard is about to pop up.
+|`onKeyboardWillShow`||yes|no|A function invoked when the keyboard is about to pop up. Receives the height as a single property.
 |`onKeyboardDidShow`||yes|yes|A function invoked when the keyboard popped up. Receives the height as a single property.
 |`onKeyboardWillHide`||yes|no|A function invoked when the keyboard is about to close.
 |`onKeyboardDidHide`||yes|yes|A function invoked when the keyboard closed.
