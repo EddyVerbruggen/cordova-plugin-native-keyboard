@@ -219,7 +219,12 @@ BOOL _keepOpenAfterSubmit;
   }
 
   if ([options[@"showKeyboard"] boolValue]) {
-    [self presentKeyboard:YES];
+    // this needs a little delay to work
+    double delayInSeconds = 0.5;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+      [self presentKeyboard:YES];
+    });
   }
 
   NSDictionary *leftButton = options[@"leftButton"];
