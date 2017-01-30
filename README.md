@@ -77,6 +77,7 @@ There are however __many__ options you can pass in to tweak the appearance and b
 |`placeholderColor`|`#CCCCCC`|yes|yes|The color of the placeholder text.
 |`backgroundColor`|`#F6F6F6`|yes|yes|The background color of the messenger bar.
 |`textViewBackgroundColor`|`#F6F6F6`|yes|yes|The background color of the textview. Looks nicest on Android if it's the same color as the `backgroundColor` property.
+|`textViewBorderColor`|`#666666`|yes|no|The border color of the textview.
 |`maxChars`||yes|limited|Setting this > 0 will make a counter show up on iOS (and ignore superfluous input on Android, for now)
 |`counterStyle`|"none"|yes|no|Options are: "none", "split", "countdown", "countdownreversed". Note that if `maxChars` is set, "none" will still show a counter.
 |`type`|"default"|yes|no|Options are: "default", "decimalpad", "phonepad", "numberpad", "namephonepad", "number", "email", "twitter", "url", "alphabet", "search", "ascii"
