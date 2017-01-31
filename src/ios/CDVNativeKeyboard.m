@@ -60,6 +60,17 @@ int maxlength;
   // this event is triggered implicitly by our code, so overriding the default impl which scrolls back to top
 }
 
+- (void)showMessengerKeyboard:(CDVInvokedUrlCommand*)command {
+  if (tvc != nil) {
+    [tvc presentKeyboard:YES];
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  } else {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Call 'showMessenger' first. You can use this method to give focus back to the messenger once its lost."];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  }
+}
+
 - (void)showMessenger:(CDVInvokedUrlCommand*)command {
   if (![NativeKeyboardHelper allowFeature:NKFeatureMessenger]) {
     // TODO error callback (errorlog must be done in featurecheck)

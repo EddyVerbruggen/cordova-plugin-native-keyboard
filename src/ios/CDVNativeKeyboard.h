@@ -10,6 +10,7 @@
 - (void)hide:(CDVInvokedUrlCommand*)command;
 
 - (void)showMessenger:(CDVInvokedUrlCommand*)command;
+- (void)showMessengerKeyboard:(CDVInvokedUrlCommand*)command;
 - (void)hideMessenger:(CDVInvokedUrlCommand*)command;
 
 @end

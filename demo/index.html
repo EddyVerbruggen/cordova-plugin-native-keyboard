@@ -41,11 +41,24 @@
 
     #header #toggleChat {
       position: absolute;
-      top: 2px;
-      padding: 20px;
+      top: 26px;
+      background-color: #eee;
       right: 0;
       font-size: 12px;
       text-decoration: underline;
+      padding: 2px;
+      border-radius: 2px;
+    }
+
+    #header #focusMessenger {
+      position: absolute;
+      top: 26px;
+      background-color: #eee;
+      right: 70px;
+      font-size: 12px;
+      text-decoration: underline;
+      padding: 2px;
+      border-radius: 2px;
     }
 
     #messages {
@@ -93,6 +106,10 @@
     }
   </style>
   <script>
+    window.onerror = function(a,b,c) {
+      alert(a);
+      alert(c);
+    }
     function appendMessage(message) {
       message = message.split("\n").join("<br/>");
       var messages = document.getElementById("messages");
@@ -108,6 +125,7 @@
 <div id="header">
   <div id="title">Chatting with John</div>
   <div id="toggleChat" onclick="toggleChat()">Toggle chat</div>
+  <div id="focusMessenger" onclick="showMessengerKeyboard()">Focus messenger</div>
 </div>
 
 <div id="messages">
@@ -143,6 +161,10 @@
     NativeKeyboard.hideMessenger({
       animated: true
     });
+  }
+
+  function showMessengerKeyboard() {
+    NativeKeyboard.showMessengerKeyboard(function(){}, function(){});
   }
 
   function showMessenger() {

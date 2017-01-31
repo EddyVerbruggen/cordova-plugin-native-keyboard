@@ -13,6 +13,7 @@ import nl.xservices.plugins.nativekeyboard.lib.OnNativeKeyboardEventListener;
 public class NativeKeyboard extends CordovaPlugin {
 
   private static final String ACTION_SHOW_MESSENGER = "showMessenger";
+  private static final String ACTION_SHOW_MESSENGER_KEYBOARD = "showMessengerKeyboard";
   private static final String ACTION_HIDE_MESSENGER = "hideMessenger";
 
   private CallbackContext _callbackContext;
@@ -35,6 +36,20 @@ public class NativeKeyboard extends CordovaPlugin {
           PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
           pluginResult.setKeepCallback(true);
           _callbackContext.sendPluginResult(pluginResult);
+        }
+
+        @Override
+        public void onError(String errorMessage) {
+          _callbackContext.error(errorMessage);
+        }
+      });
+      return true;
+
+    } else if (ACTION_SHOW_MESSENGER_KEYBOARD.equals(action)) {
+      impl.showMessengerKeyboard(new OnNativeKeyboardEventListener() {
+        @Override
+        public void onSuccess(JSONObject result) {
+          callbackContext.success();
         }
 
         @Override
