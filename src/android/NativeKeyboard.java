@@ -16,8 +16,6 @@ public class NativeKeyboard extends CordovaPlugin {
   private static final String ACTION_SHOW_MESSENGER_KEYBOARD = "showMessengerKeyboard";
   private static final String ACTION_HIDE_MESSENGER = "hideMessenger";
 
-  private CallbackContext _callbackContext;
-
   private NativeKeyboardImpl impl;
 
   protected void pluginInitialize() {
@@ -27,7 +25,6 @@ public class NativeKeyboard extends CordovaPlugin {
 
   @Override
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    this._callbackContext = callbackContext;
 
     if (ACTION_SHOW_MESSENGER.equals(action)) {
       impl.showMessenger(args.getJSONObject(0), new OnNativeKeyboardEventListener() {
@@ -35,12 +32,12 @@ public class NativeKeyboard extends CordovaPlugin {
         public void onSuccess(JSONObject result) {
           PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
           pluginResult.setKeepCallback(true);
-          _callbackContext.sendPluginResult(pluginResult);
+          callbackContext.sendPluginResult(pluginResult);
         }
 
         @Override
         public void onError(String errorMessage) {
-          _callbackContext.error(errorMessage);
+          callbackContext.error(errorMessage);
         }
       });
       return true;
@@ -54,7 +51,7 @@ public class NativeKeyboard extends CordovaPlugin {
 
         @Override
         public void onError(String errorMessage) {
-          _callbackContext.error(errorMessage);
+          callbackContext.error(errorMessage);
         }
       });
       return true;
@@ -68,7 +65,7 @@ public class NativeKeyboard extends CordovaPlugin {
 
         @Override
         public void onError(String errorMessage) {
-          _callbackContext.error(errorMessage);
+          callbackContext.error(errorMessage);
         }
       });
       return true;
