@@ -54,7 +54,18 @@
       position: absolute;
       top: 26px;
       background-color: #eee;
-      right: 70px;
+      right: 44px;
+      font-size: 12px;
+      text-decoration: underline;
+      padding: 2px;
+      border-radius: 2px;
+    }
+
+    #header #updateMessenger {
+      position: absolute;
+      top: 26px;
+      background-color: #eee;
+      right: 86px;
       font-size: 12px;
       text-decoration: underline;
       padding: 2px;
@@ -124,8 +135,9 @@
 
 <div id="header">
   <div id="title">Chatting with John</div>
-  <div id="toggleChat" onclick="toggleChat()">Toggle chat</div>
-  <div id="focusMessenger" onclick="showMessengerKeyboard()">Focus messenger</div>
+  <div id="toggleChat" onclick="toggleChat()">Toggle</div>
+  <div id="focusMessenger" onclick="showMessengerKeyboard()">Focus</div>
+  <div id="updateMessenger" onclick="updateMessenger()">Update</div>
 </div>
 
 <div id="messages">
@@ -163,6 +175,20 @@
     });
   }
 
+  function updateMessenger() {
+    var options = {
+      text: "This is the updated text! ",
+      showKeyboard: true,
+      caretIndex: 10 // caret is set at end of text if not specified
+    };
+
+    NativeKeyboard.updateMessenger(
+      options,
+      // optional success and error handlers
+      function(){},
+      function(){});
+  }
+
   function showMessengerKeyboard() {
     NativeKeyboard.showMessengerKeyboard(function(){}, function(){});
   }
@@ -173,11 +199,13 @@
         console.log("onSubmit: " + text);
         appendMessage(text);
       },
-      onKeyboardWillShow: function () {
-        console.log("keyboard will show");
+      onKeyboardWillShow: function (height) {
+        console.log("keyboard will show, height is: " + height);
+        //appendMessage("keyboard will show, height is: " + height);
       },
       onKeyboardDidShow: function (height) {
-        console.log("keyboard did show, height is: " + height);
+        console.log("keyboard shows, height is: " + height);
+        //appendMessage("keyboard shows, height is: " + height);
       },
       onKeyboardWillHide: function () {
         console.log("keyboard will hide");
@@ -186,9 +214,10 @@
         console.log("keyboard did hide");
       },
       onTextChanged: function(newText) {
-        // every keystroke will be logged
         console.log("text changed to: " + newText);
+        //appendMessage(newText);
       },
+      showKeyboard: true,
       type: "twitter", // iOS only, default (default) | decimalpad | phonepad | numberpad | namephonepad | number | email | twitter | url | alphabet | search | ascii
       appearance: "light", // iOS only,  light (default) | dark
       secure: false, // iOS only,  default false, disables things like Emoji and Predicive text entry
@@ -197,7 +226,7 @@
       autoscrollElement: document.getElementById("messages"), // default unset
       keepOpenAfterSubmit: true, // default false
       animated: true,
-      text: 'Prefilled text!',
+      text: "This has been prefilled",
       placeholder: 'Type your message..',
       placeholderColor: "#DDDDDD",
       textViewBackgroundColor: "#F6F6F6",
@@ -206,7 +235,6 @@
       maxChars: 140, // setting this > 0 will make the counter show up on iOS (and ignore input on Android, for now)
       counterStyle: 'countdownreversed', // iOS only currently, note that 'none' still shows a counter in case maxChars is set
       textColor: '#555555',
-      showKeyboard: true,
 
       // this button is best suited for picking media (camera / cameraroll / last image) from an actionsheet
       leftButton: {

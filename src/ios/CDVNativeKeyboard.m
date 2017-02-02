@@ -108,6 +108,31 @@ int maxlength;
   }
 }
 
+- (void)updateMessenger:(CDVInvokedUrlCommand*)command {
+  if (tvc != nil) {
+    NSDictionary* options = [command argumentAtIndex:0];
+    if (options[@"text"]) {
+      tvc.textView.text = options[@"text"];
+    }
+
+    if ([options[@"showKeyboard"] boolValue]) {
+      [tvc presentKeyboard:YES];
+    }
+
+    if (options[@"caretIndex"] != nil) {
+      int caretIndex = [options[@"caretIndex"] intValue];
+      UITextPosition *textPosition = [tvc.textView positionFromPosition:tvc.textView.beginningOfDocument offset:caretIndex];
+      [tvc.textView setSelectedTextRange:[tvc.textView textRangeFromPosition:textPosition toPosition:textPosition]];
+    }
+
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  } else {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Call 'showMessenger' first."];
+      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  }
+}
+
 - (void)hideMessenger:(CDVInvokedUrlCommand*)command {
   if (tvc != nil) {
     NSDictionary* options = [command argumentAtIndex:0];
@@ -136,7 +161,7 @@ int maxlength;
   textarea = [@"textarea" isEqualToString:options[@"type"]];
 
   UIControl<NKTextInput>* field = [self getActiveTextViewOrField];
-  
+
   // to make this play nice with the messenger, we need to do:
   if (textarea) {
     if (!wasTextarea) {
@@ -151,11 +176,11 @@ int maxlength;
   if (![field isDescendantOfView:self.viewController.view]) {
     [self.viewController.view addSubview:field];
   }
-  
+
   allowClose = NO;
-  
+
   CGRect screenBounds = [[UIScreen mainScreen] bounds];
-  
+
   if (options[@"type"] != nil) {
     if ([NativeKeyboardHelper allowFeature:NKFeatureKeyboardType]) {
       UIKeyboardType keyBoardType = [NativeKeyboardHelper getUIKeyboardType:options[@"type"]];
@@ -179,20 +204,20 @@ int maxlength;
   }
   [field setReturnKeyType:[NativeKeyboardHelper getUIReturnKeyType:returnKeyType]];
   [field setKeyboardAppearance:[NativeKeyboardHelper getUIKeyboardAppearance:options[@"appearance"]]];
-  
+
   double phoneHeight = screenBounds.size.height;
   // prolly better to grab it like this: https://github.com/driftyco/ionic-plugin-keyboard/blob/master/src/ios/IonicKeyboard.m#L27
   double keyboardHeight = 240;
-  
+
   NSDictionary *accessorybar = options[@"accessorybar"];
   if (accessorybar == nil) {
     [field setInputAccessoryView:nil];
   } else {
     int toolbarHeight = 44;
     keyboardHeight += toolbarHeight;
-    
+
     toolBar.frame = CGRectMake(0, 0, screenBounds.size.width, toolbarHeight);
-    
+
     NSArray *btns = accessorybar[@"buttons"];
     NSMutableArray<UIBarButtonItem*> *buttons = [[NSMutableArray alloc] initWithCapacity:btns.count];
     for (int i = 0; i < (int)btns.count; i++) {
@@ -243,7 +268,7 @@ int maxlength;
         [buttons addObject:button];
       }
     }
-    
+
     if (buttons.count > 0) {
       [NativeKeyboardHelper setUIBarStyle:accessorybar[@"style"] forToolbar:toolBar];
       [toolBar setItems:buttons];
@@ -253,7 +278,7 @@ int maxlength;
       [field setInputAccessoryView:nil];
     }
   }
-  
+
   // used elsewhere
   maxlength = [options[@"maxlength"] intValue];
   offsetTop = [options[@"offsetTop"] doubleValue];
@@ -261,7 +286,7 @@ int maxlength;
   double yCorrection = [field updatePostion:options
                              forPhoneHeight:phoneHeight
                           andKeyboardHeight:keyboardHeight];
-  
+
   // adjust the scrollposition if needed
   if (yCorrection > 0) {
     // set this to 0 to hide the caret initially
@@ -275,13 +300,13 @@ int maxlength;
     }
 
     [self.webView.scrollView setContentOffset: CGPointMake(0, yCorrection + offsetTop) animated:YES];
-    
+
     // do this to early and things will crash
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 500 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
       [self.webView.scrollView setScrollEnabled:NO];
       self.webView.scrollView.delegate = self;
     });
-    
+
     // now show the caret
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 300 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
       field.alpha = 1;
@@ -355,7 +380,7 @@ BOOL allowClose = NO;
   [field hide];
   [self.webView.scrollView setScrollEnabled:YES];
   self.webView.scrollView.delegate = nil;
-  
+
   [self dismissKeyboard:YES];
 
   // restore the scroll position
@@ -395,7 +420,7 @@ BOOL allowClose = NO;
   } else if ([text isEqualToString:@"\t"]) {
     return NO;
   }
-  
+
   if (maxlength > 0 && textField.text.length >= maxlength && text.length > 0) {
     return NO;
   }

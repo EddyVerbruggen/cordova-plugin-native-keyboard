@@ -131,6 +131,28 @@ NativeKeyboard.showMessengerKeyboard(
 );
 ```
 
+
+### `updateMessenger`
+Manipulate the messenger while it's open. For instance if you want to update the text programmatically based on what the user typed (by responding to `onTextChanged` events).
+
+|option|type|iOS|Android|description
+|---|---|---|---|---
+|`text`|`string`|yes|yes|Replace the messenger's text by this. The current text remains if omitted.
+|`caretIndex`|`number`|yes|yes|Position the cursor anywhere in the text range. Defaults to the end of the text.
+|`showKeyboard`|`boolean`|yes|yes|If `false` or omitted no changes to the keyboard state are made.
+
+```js
+NativeKeyboard.updateMessenger(
+    {
+      text: "Text updated! ", // added a space so the user can continue typing
+      caretIndex: 5,
+      showKeyboard: true
+    },
+    function() { console.log('updated ok') },
+    function(err) { console.log(err)}
+);
+```
+
 ## I like it, hook me up!
 This plugin has been a BEAST to implement and its maintenance is killing me already so I need to make this a commercial offering (with a __free trial__, see below) to keep it afloat. If you have a compelling reason to not pay for an unlocked version let me know and we'll work something out.
 
