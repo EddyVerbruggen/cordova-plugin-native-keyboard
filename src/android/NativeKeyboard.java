@@ -16,6 +16,7 @@ public class NativeKeyboard extends CordovaPlugin {
   private static final String ACTION_SHOW_MESSENGER_KEYBOARD = "showMessengerKeyboard";
   private static final String ACTION_UPDATE_MESSENGER = "updateMessenger";
   private static final String ACTION_HIDE_MESSENGER = "hideMessenger";
+  private static final String ACTION_HIDE_MESSENGER_KEYBOARD = "hideMessengerKeyboard";
 
   private NativeKeyboardImpl impl;
 
@@ -45,6 +46,20 @@ public class NativeKeyboard extends CordovaPlugin {
 
     } else if (ACTION_SHOW_MESSENGER_KEYBOARD.equals(action)) {
       impl.showMessengerKeyboard(new OnNativeKeyboardEventListener() {
+        @Override
+        public void onSuccess(JSONObject result) {
+          callbackContext.success();
+        }
+
+        @Override
+        public void onError(String errorMessage) {
+          callbackContext.error(errorMessage);
+        }
+      });
+      return true;
+
+    } else if (ACTION_HIDE_MESSENGER_KEYBOARD.equals(action)) {
+      impl.hideMessengerKeyboard(new OnNativeKeyboardEventListener() {
         @Override
         public void onSuccess(JSONObject result) {
           callbackContext.success();

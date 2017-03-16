@@ -11,6 +11,8 @@
 
 - (void)showMessenger:(CDVInvokedUrlCommand*)command;
 - (void)showMessengerKeyboard:(CDVInvokedUrlCommand*)command;
+- (void)updateMessenger:(CDVInvokedUrlCommand*)command;
 - (void)hideMessenger:(CDVInvokedUrlCommand*)command;
+- (void)hideMessengerKeyboard:(CDVInvokedUrlCommand*)command;
 
 @end

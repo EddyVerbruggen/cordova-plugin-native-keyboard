@@ -141,6 +141,17 @@ int maxlength;
   }
 }
 
+- (void)hideMessengerKeyboard:(CDVInvokedUrlCommand*)command {
+  if (tvc != nil) {
+    [tvc dismissKeyboard:YES];
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  } else {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Keyboard wasn't showing."];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  }
+}
+
 /*
  It's a bit hard to find a thing that can run in the background here since it's mainly UI stuff. But if we do, we can use:
   [self.commandDelegate runInBackground:^{

@@ -131,6 +131,16 @@ NativeKeyboard.showMessengerKeyboard(
 );
 ```
 
+### `hideMessengerKeyboard`
+And if you want to programmatically hide the keyboard (but not the messenger bar), use this:
+
+```js
+NativeKeyboard.hideMessengerKeyboard(
+    // these functions are optional
+    function() { console.log('ok') },
+    function(err) { console.log(err)}
+);
+```
 
 ### `updateMessenger`
 Manipulate the messenger while it's open. For instance if you want to update the text programmatically based on what the user typed (by responding to `onTextChanged` events).
