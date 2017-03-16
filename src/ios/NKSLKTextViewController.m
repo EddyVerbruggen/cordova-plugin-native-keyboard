@@ -45,6 +45,7 @@ BOOL _keepOpenAfterSubmit;
 
 - (void) updateKeyboardHeight:(CGFloat)height {
   _baseKeyboardHeight = height;
+  [self didChangeKeyboardStatus:SLKKeyboardStatusDidShow];
 }
 
 // The default is 'NO' which also means the 'keyboardWillHide' is not fired.
@@ -158,6 +159,9 @@ BOOL _keepOpenAfterSubmit;
   }
 
   self.textView.text = options[@"text"];
+
+  // if a size is passed in we can set it here:
+//  [self.textView setFont:[UIFont systemFontOfSize:15.0]];
 
   // style the messageview
   self.textView.placeholder = options[@"placeholder"];
