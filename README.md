@@ -12,7 +12,7 @@ Native Keyboard
 _Videos of iOS and Android running the [included demo app](demo/index.html)._
 
 ## So it's just a fancy keyboard?
-You're damn right it is! 👍
+You're damn right it is! 👍😊
 
 A cross platform WhatsApp / Messenger / Slack -style keyboard even. For _your_ Cordova app.
 
