@@ -6,8 +6,8 @@ Native Keyboard
 > -- _[Luke Wroblewski](http://www.lukew.com/ff/entry.asp?1696)_
 
 
-<img src="media/videos/iOS/messenger.gif" height="716px"/>&nbsp;&nbsp;&nbsp;
-<img src="media/videos/Android/messenger.gif" height="716px"/>
+<img src="https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/raw/master/media/videos/iOS/messenger.gif" height="716px"/>&nbsp;&nbsp;&nbsp;
+<img src="https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/raw/master/media/videos/Android/messenger.gif" height="716px"/>
 
 _Videos of iOS and Android running the [included demo app](demo/index.html)._
 
