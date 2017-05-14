@@ -82,20 +82,34 @@ int maxlength;
   [self.textView removeFromSuperview];
   [self.textField removeFromSuperview];
 
+  if (tvc == nil) {
   tvc = [[NKSLKTextViewController alloc] initWithScrollView:self.webView.scrollView
                                                 withCommand:command
                                          andCommandDelegate:self.commandDelegate];
+  }
 
-  if (tvc != nil) {
     NSArray * ors = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
     NSArray * suppOrientations = [((CDVViewController*)self.viewController) parseInterfaceOrientations:ors];
     [tvc setSupportedInterfaceOrientations:suppOrientations];
+
+  //BOOL overlap = false;
 
     // if a backgroundcolor is passed in, use that (TODO), otherwise use the webview bgcolor
     tvc.view.backgroundColor = self.webView.backgroundColor;
 
     [tvc setTextInputbarHidden:YES animated:NO];
+
+  // if an AdMob banner is displayed without overlap there will be 2 subviews
+  long nrOfSubviews = [[self.webView.superview subviews] count];
+
+  if (nrOfSubviews == 1) {
+    [self.webView insertSubview:tvc.view atIndex:0];
+  } else {
     [self.viewController.view addSubview:tvc.view];
+    UIView *sub2 = [[self.webView.superview subviews] objectAtIndex:1];
+    [self.webView.superview bringSubviewToFront:sub2];
+  }
+
     [tvc setTextInputbarHidden:NO animated:[options[@"animated"] boolValue]];
 
     if ([options[@"scrollToBottomAfterMessengerShows"] boolValue]) {
@@ -105,6 +119,13 @@ int maxlength;
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"ready":@(YES)}];
     pluginResult.keepCallback = [NSNumber numberWithBool:YES];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  }
+
+- (void)hideMessenger:(CDVInvokedUrlCommand*)command {
+  if (tvc != nil) {
+    NSDictionary* options = [command argumentAtIndex:0];
+    [tvc setTextInputbarHidden:YES animated:[options[@"animated"] boolValue]];
+//    tvc = nil;
   }
 }
 
@@ -130,14 +151,6 @@ int maxlength;
   } else {
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Call 'showMessenger' first."];
       [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-  }
-}
-
-- (void)hideMessenger:(CDVInvokedUrlCommand*)command {
-  if (tvc != nil) {
-    NSDictionary* options = [command argumentAtIndex:0];
-    [tvc setTextInputbarHidden:YES animated:[options[@"animated"] boolValue]];
-    tvc = nil;
   }
 }
 
