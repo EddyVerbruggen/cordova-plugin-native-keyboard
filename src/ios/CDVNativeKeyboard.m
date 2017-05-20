@@ -99,15 +99,20 @@ int maxlength;
 
     [tvc setTextInputbarHidden:YES animated:NO];
 
-  // if an AdMob banner is displayed without overlap there will be 2 subviews
+  // if an AdMob banner is displayed without overlap there will be 2 subviews, but it may have other causes as well
   long nrOfSubviews = [[self.webView.superview subviews] count];
 
   if (nrOfSubviews == 1) {
     [self.webView insertSubview:tvc.view atIndex:0];
   } else {
-    [self.viewController.view addSubview:tvc.view];
     UIView *sub2 = [[self.webView.superview subviews] objectAtIndex:1];
-    [self.webView.superview bringSubviewToFront:sub2];
+    NSString *classname = NSStringFromClass([sub2 class]);
+    if ([classname containsString:@"Banner"]) {
+      [self.viewController.view addSubview:tvc.view];
+      [self.webView.superview bringSubviewToFront:sub2];
+    } else {
+      [self.webView insertSubview:tvc.view atIndex:0];
+    }
   }
 
     [tvc setTextInputbarHidden:NO animated:[options[@"animated"] boolValue]];
