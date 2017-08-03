@@ -166,7 +166,7 @@ NativeKeyboard.updateMessenger(
 ## I like it, hook me up!
 This plugin has been a BEAST to implement and its maintenance is killing me already so I need to make this a commercial offering (with a __free trial__, see below) to keep it afloat. If you have a compelling reason to not pay for an unlocked version let me know and we'll work something out.
 
-* Look up the ID of the app you want to use the plugin with - you can find it at the top of config.xml and is something like `io.cordova.hellocordova` (if you have a different staging ID, or iOS and Android ID's are different just send me all of those and you'll get multiple license codes while paying for one).
+* Look up the ID of the app you want to use the plugin with - you can find it at the top of config.xml and is something like `io.cordova.hellocordova` (if you have a different staging ID, or iOS and Android ID's are different just send me all of those and __you'll get multiple license codes and pay for only one__).
 * Send a one-time fee of USD 199 (or EUR 185) to [my PayPal account](https://www.paypal.me/EddyVerbruggen/199usd) and make sure to include your app ID. Want to use a bankaccount instead? No problem, just contact me at eddyverbruggen@gmail.com for details.
 * You'll quickly receive a license key (and instructions) which you can use to install the plugin.
 * You can now forever use this version and any future version of this plugin for this app without restrictions.
