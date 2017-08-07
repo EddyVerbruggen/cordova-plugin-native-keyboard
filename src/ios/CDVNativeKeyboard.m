@@ -83,21 +83,21 @@ int maxlength;
   [self.textField removeFromSuperview];
 
   if (tvc == nil) {
-  tvc = [[NKSLKTextViewController alloc] initWithScrollView:self.webView.scrollView
-                                                withCommand:command
-                                         andCommandDelegate:self.commandDelegate];
+      tvc = [[NKSLKTextViewController alloc] initWithScrollView:self.webView.scrollView];
   }
 
-    NSArray * ors = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
-    NSArray * suppOrientations = [((CDVViewController*)self.viewController) parseInterfaceOrientations:ors];
-    [tvc setSupportedInterfaceOrientations:suppOrientations];
+  [tvc configureMessengerWithCommand:command andCommandDelegate:self.commandDelegate];
+    
+  NSArray * ors = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
+  NSArray * suppOrientations = [((CDVViewController*)self.viewController) parseInterfaceOrientations:ors];
+  [tvc setSupportedInterfaceOrientations:suppOrientations];
 
   //BOOL overlap = false;
 
-    // if a backgroundcolor is passed in, use that (TODO), otherwise use the webview bgcolor
-    tvc.view.backgroundColor = self.webView.backgroundColor;
+  // if a backgroundcolor is passed in, use that (TODO), otherwise use the webview bgcolor
+  tvc.view.backgroundColor = self.webView.backgroundColor;
 
-    [tvc setTextInputbarHidden:YES animated:NO];
+  [tvc setTextInputbarHidden:YES animated:NO];
 
   // if an AdMob banner is displayed without overlap there will be 2 subviews, but it may have other causes as well
   long nrOfSubviews = [[self.webView.superview subviews] count];
@@ -115,16 +115,16 @@ int maxlength;
     }
   }
 
-    [tvc setTextInputbarHidden:NO animated:[options[@"animated"] boolValue]];
+  [tvc setTextInputbarHidden:NO animated:[options[@"animated"] boolValue]];
 
-    if ([options[@"scrollToBottomAfterMessengerShows"] boolValue]) {
-      [self.webView.scrollView scrollRectToVisible:CGRectInfinite animated:YES];
-    }
-
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"ready":@(YES)}];
-    pluginResult.keepCallback = [NSNumber numberWithBool:YES];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  if ([options[@"scrollToBottomAfterMessengerShows"] boolValue]) {
+    [self.webView.scrollView scrollRectToVisible:CGRectInfinite animated:YES];
   }
+
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"ready":@(YES)}];
+  pluginResult.keepCallback = [NSNumber numberWithBool:YES];
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
 
 - (void)hideMessenger:(CDVInvokedUrlCommand*)command {
   if (tvc != nil) {
@@ -155,7 +155,7 @@ int maxlength;
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
   } else {
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Call 'showMessenger' first."];
-      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
   }
 }
 

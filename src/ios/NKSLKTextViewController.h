@@ -3,7 +3,9 @@
 
 @interface NKSLKTextViewController : SLKTextViewController
 
-- (instancetype)initWithScrollView:(UIScrollView *)scrollView withCommand:(CDVInvokedUrlCommand*)command andCommandDelegate:(id <CDVCommandDelegate>)commandDelegate;
+- (instancetype)initWithScrollView:(UIScrollView *)scrollView;
+
+- (void) configureMessengerWithCommand:(CDVInvokedUrlCommand*)command andCommandDelegate:(id <CDVCommandDelegate>)commandDelegate;
 
 - (void) updateKeyboardHeight:(CGFloat)height;
 

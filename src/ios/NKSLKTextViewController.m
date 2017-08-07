@@ -133,22 +133,21 @@ BOOL _keepOpenAfterSubmit;
   [super didPressRightButton:sender];
 }
 
-- (instancetype)initWithScrollView:(UIScrollView *)scrollView withCommand:(CDVInvokedUrlCommand*)command andCommandDelegate:(id <CDVCommandDelegate>)commandDelegate {
-
-  if (![NativeKeyboardHelper checkLicense]) {
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No valid license found; usage of the native keyboard plugin is restricted to 5 minutes."];
-    [commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    return nil;
-  }
-
+- (instancetype)initWithScrollView:(UIScrollView *)scrollView {
   self = [super initWithScrollView:scrollView];
-  _commandDelegate = commandDelegate;
-  _command = command;
-  [self configureMessenger];
   return self;
 }
 
-- (void) configureMessenger {
+- (void) configureMessengerWithCommand:(CDVInvokedUrlCommand*)command andCommandDelegate:(id <CDVCommandDelegate>)commandDelegate {
+  if (![NativeKeyboardHelper checkLicense]) {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No valid license found; usage of the native keyboard plugin is restricted to 5 minutes."];
+    [commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    return;
+  }
+
+  _command = command;
+  _commandDelegate = commandDelegate;
+
   NSDictionary* options = [_command argumentAtIndex:0];
   NSNumber* maxChars = options[@"maxChars"];
   if (maxChars != nil) {
