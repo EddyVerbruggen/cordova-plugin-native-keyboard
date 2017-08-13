@@ -18,7 +18,7 @@ int maxlength;
 {
   // especially useful for the messenger component
   [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(keyboardWillShown:)
+                                           selector:@selector(keyboardWillShow:)
                                                name:UIKeyboardWillShowNotification object:nil];
 
   // for the textField
@@ -27,8 +27,8 @@ int maxlength;
                                                name:UITextFieldTextDidChangeNotification object:self.textField];
 }
 
-// Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWillShown:(NSNotification*)aNotification
+// Called when the UIKeyboardWillShowNotification is sent.
+- (void)keyboardWillShow:(NSNotification*)aNotification
 {
   if (tvc != nil) {
     CGSize kbSize = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
