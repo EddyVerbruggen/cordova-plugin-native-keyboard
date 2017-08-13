@@ -57,6 +57,8 @@ BOOL _keepOpenAfterSubmit;
 
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status {
   [super didChangeKeyboardStatus:status];
+  CGFloat height = self.textView.frame.size.height;
+  _lastContentHeight = height;
   if (SLKKeyboardStatusWillShow == status) {
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"keyboardWillShow":@(YES), @"keyboardHeight":[NSNumber numberWithFloat:_baseKeyboardHeight+_lastContentHeight]}];
     pluginResult.keepCallback = [NSNumber numberWithBool:YES];
