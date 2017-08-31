@@ -173,3 +173,6 @@ This plugin has been a BEAST to implement and its maintenance is killing me alre
 
 ## I heard about a trial!?
 ALL features are available without a license, but you'll be restricted to 5 minutes of usage. Just indefinitely kill and relaunch the app if you need more time ;)
+
+## Can you remove the license check for my prototype apps?
+Sure, just add the word 'prototype' (case insensitive) anywhere in your packageid. Example: 'com.mycompany.myclientapp-PROTOTYPE' or 'com.mycompany.prototypes.myclientapp'.
