@@ -121,9 +121,6 @@ int maxlength;
     [self.webView.scrollView scrollRectToVisible:CGRectInfinite animated:YES];
   }
 
-  // This is required since iOS 11, see https://github.com/slackhq/SlackTextViewController/issues/604
-  [tvc.textInputbar sendSubviewToBack:[tvc.textInputbar.subviews lastObject]];
-
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"ready":@(YES)}];
   pluginResult.keepCallback = [NSNumber numberWithBool:YES];
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
