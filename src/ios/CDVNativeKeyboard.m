@@ -31,7 +31,7 @@ int maxlength;
 - (void)keyboardWillShow:(NSNotification*)aNotification
 {
   if (tvc != nil) {
-    CGSize kbSize = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    CGSize kbSize = [[[aNotification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     [tvc updateKeyboardHeight:kbSize.height];
   }
 }
