@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="format-detection" content="telephone=no">
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+  <meta name="viewport" content="initial-scale=1, width=device-width, height=device-height, viewport-fit=cover">
   <style>
     * {
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
@@ -17,8 +17,8 @@
       font-family: 'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
       font-size: 16px;
       height: 100%;
-      margin: 0;
       padding: 0;
+      margin: 0;
       width: 100%;
     }
 
@@ -183,10 +183,10 @@
     };
 
     NativeKeyboard.updateMessenger(
-      options,
-      // optional success and error handlers
-      function(){},
-      function(){});
+        options,
+        // optional success and error handlers
+        function(){},
+        function(){});
   }
 
   function showMessengerKeyboard() {
@@ -230,7 +230,7 @@
       placeholder: 'Type your message..',
       placeholderColor: "#DDDDDD",
       textViewBackgroundColor: "#F6F6F6",
-      backgroundColor: "#F6F6F6",
+      backgroundColor: "#F6F6F6", // default #F7F7F7
       textViewBorderColor: "#777777", // iOS only
       maxChars: 140, // setting this > 0 will make the counter show up on iOS (and ignore input on Android, for now)
       counterStyle: 'countdownreversed', // iOS only currently, note that 'none' still shows a counter in case maxChars is set
