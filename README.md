@@ -163,6 +163,9 @@ NativeKeyboard.updateMessenger(
 );
 ```
 
+## A note on iPhone X (and other iOS devices with rounded screens)
+Update this plugin to at least 1.5.0, and add [`viewport-fit=cover` to your viewport](https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/blob/84fa7ce962f1b56cc71b1d1f2454c46ba3b8aca7/demo/index.html#L6). 
+
 ## I like it, hook me up!
 This plugin has been a BEAST to implement and its maintenance is killing me already so I need to make this a commercial offering (with a __free trial__, see below) to keep it afloat. If you have a compelling reason to not pay for an unlocked version let me know and we'll work something out.
 
