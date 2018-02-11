@@ -189,9 +189,10 @@ BOOL _keepOpenAfterSubmit;
   _keepOpenAfterSubmit = [options[@"keepOpenAfterSubmit"] boolValue];
 
   NSString* backgroundColor = options[@"backgroundColor"];
-  if (backgroundColor != nil) {
-    self.textInputbar.backgroundColor = [NativeKeyboardHelper colorFromHexString:backgroundColor];
+  if (backgroundColor == nil) {
+    backgroundColor = @"#F7F7F7";
   }
+  self.textInputbar.backgroundColor = [NativeKeyboardHelper colorFromHexString:backgroundColor];
 
   NSString *text = options[@"text"];
   self.textView.text = text;

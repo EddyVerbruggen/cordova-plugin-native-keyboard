@@ -92,10 +92,12 @@ int maxlength;
   NSArray * suppOrientations = [((CDVViewController*)self.viewController) parseInterfaceOrientations:ors];
   [tvc setSupportedInterfaceOrientations:suppOrientations];
 
-  //BOOL overlap = false;
-
-  // if a backgroundcolor is passed in, use that (TODO), otherwise use the webview bgcolor
-  tvc.view.backgroundColor = self.webView.backgroundColor;
+    // set the vc backgroundcolor to the color of slackvc (which has a default backgroundcolor of #F7F7F7) because otherwise it looks ugly on iPhone X when the keyboard is closed
+    NSString* backgroundColor = options[@"backgroundColor"];
+    if (backgroundColor == nil) {
+        backgroundColor = @"#F7F7F7";
+    }
+    self.viewController.view.backgroundColor = [NativeKeyboardHelper colorFromHexString:backgroundColor];
 
   [tvc setTextInputbarHidden:YES animated:NO];
 
