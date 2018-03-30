@@ -48,8 +48,8 @@
     <source-file src="src/android/res/values/font_awesome.xml" target-dir="res/values" />
     <source-file src="src/android/res/drawable/cursor.xml" target-dir="res/drawable" />
 
-    <source-file src="src/android/assets/fonts/fontawesome-webfont.ttf" target-dir="assets/fonts" />
-    <source-file src="src/android/assets/fonts/ionicons.ttf" target-dir="assets/fonts" />
+    <source-file src="src/android/assets/fonts/fontawesome-webfont.ttf" target-dir="app/src/main/assets/fonts" />
+    <source-file src="src/android/assets/fonts/ionicons.ttf" target-dir="app/src/main/assets/fonts" />
 
     <source-file src="src/android/res/values/nativekeyboard.xml" target-dir="res/values" />
     <config-file target="res/values/nativekeyboard.xml" parent="/*">
