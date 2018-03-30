@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-native-keyboard"
-        version="1.5.0">
+        version="1.5.1">
 
   <name>Native Keyboard</name>
 
@@ -48,6 +48,11 @@
     <source-file src="src/android/res/values/font_awesome.xml" target-dir="res/values" />
     <source-file src="src/android/res/drawable/cursor.xml" target-dir="res/drawable" />
 
+    <!-- cordova-android < 7 -->
+    <source-file src="src/android/assets/fonts/fontawesome-webfont.ttf" target-dir="assets/fonts" />
+    <source-file src="src/android/assets/fonts/ionicons.ttf" target-dir="assets/fonts" />
+
+    <!-- cordova-android >= 7 -->
     <source-file src="src/android/assets/fonts/fontawesome-webfont.ttf" target-dir="app/src/main/assets/fonts" />
     <source-file src="src/android/assets/fonts/ionicons.ttf" target-dir="app/src/main/assets/fonts" />
 
@@ -81,7 +86,7 @@
         <string>FontAwesome.ttf</string>
       </array>
     </config-file>
-    
+
     <config-file target="*-Info.plist" parent="NativeKeyboardPluginLicense">
       <string>$LICENSE</string>
     </config-file>
