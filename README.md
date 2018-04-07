@@ -16,9 +16,6 @@ You're damn right it is! 👍😊
 
 A cross platform WhatsApp / Messenger / Slack -style keyboard even. For _your_ Cordova app.
 
-## Cool, but does it scale?
-Lol.. wut?
-
 ## OK, let me try this..
 Open a command prompt and do:
 
@@ -165,6 +162,9 @@ NativeKeyboard.updateMessenger(
 
 ## A note on iPhone X (and other iOS devices with rounded screens)
 Update this plugin to at least 1.5.0, and add [`viewport-fit=cover` to your viewport](https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/blob/84fa7ce962f1b56cc71b1d1f2454c46ba3b8aca7/demo/index.html#L6). 
+
+## A note for cordova-android 7 users
+Update the plugin to at least 1.5.2 because cordova-android 7 has slightly different internals, causing the license validity check to no longer work, meaning the plugin would stop working after 5 minutes. This was fixed in 1.5.2 (and it's backward compatible with older versions of cordova-android).
 
 ## I like it, hook me up!
 This plugin has been a BEAST to implement and its maintenance is killing me already so I need to make this a commercial offering (with a __free trial__, see below) to keep it afloat. If you have a compelling reason to not pay for an unlocked version let me know and we'll work something out.
