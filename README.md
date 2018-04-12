@@ -165,7 +165,7 @@ NativeKeyboard.updateMessenger(
 
 ## Notes for Android
 - If you're using cordova-android 7 or higher, update the plugin to at least 1.5.2 because cordova-android 7 has slightly different internals, causing the license validity check to no longer work - meaning the plugin would stop working after 5 minutes. This was fixed in 1.5.2 (and it's backward compatible with older versions of cordova-android).
-- Make sure your `activity` in `AndroidManifest.xml` has the (default) `android:windowSoftInputMode="adjustResize"` property. Otherwise the inputfield will be hidden when the keyboard pops up.
+- Make sure your `activity` in `AndroidManifest.xml` has the (default) `android:windowSoftInputMode="adjustResize"` (or `adjustPan`) property. Otherwise the inputfield will be hidden when the keyboard pops up.
 
 ## I like it, hook me up!
 This plugin has been a BEAST to implement and its maintenance is killing me already so I need to make this a commercial offering (with a __free trial__, see below) to keep it afloat. If you have a compelling reason to not pay for an unlocked version let me know and we'll work something out.
