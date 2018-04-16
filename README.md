@@ -72,6 +72,8 @@ There are however __many__ options you can pass in to tweak the appearance and b
 |`textColor`|`#444444`|yes|yes|The color of the typed text.
 |`placeholder`||yes|yes|Like a regular HTML input placeholder.
 |`placeholderColor`|`#CCCCCC`|yes|yes|The color of the placeholder text.
+|`suppressSuggestions`|`true`|no/yes/Set this to `false` to allow predictive text on Android
+|`#CCCCCC`|yes|yes|The color of the placeholder text.
 |`backgroundColor`|`#F6F6F6`|yes|yes|The background color of the messenger bar.
 |`textViewBackgroundColor`|`#F6F6F6`|yes|yes|The background color of the textview. Looks nicest on Android if it's the same color as the `backgroundColor` property.
 |`textViewBorderColor`|`#666666`|yes|no|The border color of the textview.
