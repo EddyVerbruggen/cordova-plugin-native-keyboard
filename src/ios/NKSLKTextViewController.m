@@ -249,6 +249,10 @@ BOOL _keepOpenAfterSubmit;
       // 'text' type is not yet supported, see https://github.com/slackhq/SlackTextViewController/issues/457
       NSLog(@"On iOS type 'text' is not supported (yet) on the left button.");
     }
+  } else {
+    // reset, so if you want an instance with and without a left button this will make that scenario work
+    [self.leftButton setImage:nil forState:UIControlStateNormal];
+    [self.leftButton setTitle:@"" forState:UIControlStateNormal];
   }
 
   // change the label and color of the send button
