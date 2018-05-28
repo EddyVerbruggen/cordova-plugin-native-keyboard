@@ -253,6 +253,7 @@ BOOL _keepOpenAfterSubmit;
     // reset, so if you want an instance with and without a left button this will make that scenario work
     [self.leftButton setImage:nil forState:UIControlStateNormal];
     [self.leftButton setTitle:@"" forState:UIControlStateNormal];
+    [[self.leftButton superview] layoutIfNeeded];
   }
 
   // change the label and color of the send button
