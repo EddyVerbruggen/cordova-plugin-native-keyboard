@@ -1,53 +1,18 @@
 //
-//  IonIcons.h
-//  ionicons-iOS is Copyright 2013 TapTemplate and released under the MIT license.
-//  http://www.taptemplate.com
-//  ==========================
+//  ionicons.h
+//  ionicons
+//
+//  Created by sweetman on 5/1/17.
+//  Copyright © 2017 David Sweetman. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-#import "ionicons-codes.h"
+//! Project version number for ionicons.
+FOUNDATION_EXPORT double ioniconsVersionNumber;
 
-@interface IonIcons : NSObject
+//! Project version string for ionicons.
+FOUNDATION_EXPORT const unsigned char ioniconsVersionString[];
 
-//================================
-// Font and Label Methods
-//================================
+#import "IonIcons-iOS.h"
 
-/*! Convenience method to get the ionicons font.
- */
-+ (UIFont*)fontWithSize:(CGFloat)size;
-
-/*!  Convenience method to make a sized-to-fit UILabel containing an icon in the given font size and color.
- */
-+ (UILabel*)labelWithIcon:(NSString*)icon_name
-                     size:(CGFloat)size
-                    color:(UIColor*)color;
-
-/*! Adjust an existing UILabel to show an ionicon.
- */
-+ (void)label:(UILabel*)label
-      setIcon:(NSString*)icon_name
-         size:(CGFloat)size
-        color:(UIColor*)color
-    sizeToFit:(BOOL)shouldSizeToFit;
-
-//================================
-// Image Methods
-//================================
-
-/*! Create a UIImage of an ionocin, making the image and the icon the same size:
- */
-+ (UIImage*)imageWithIcon:(NSString*)icon_name
-                     size:(CGFloat)size
-                    color:(UIColor*)color;
-
-/*! Create a UIImage of an ionocin, and specify different sizes for the image and the icon:
- */
-+ (UIImage*)imageWithIcon:(NSString*)icon_name
-                iconColor:(UIColor*)color
-                 iconSize:(CGFloat)iconSize
-                imageSize:(CGSize)imageSize;
-
-@end
