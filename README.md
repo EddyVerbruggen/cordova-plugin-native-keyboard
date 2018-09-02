@@ -176,6 +176,18 @@ This plugin has been a BEAST to implement and its maintenance is killing me alre
 * You'll quickly receive a license key (and instructions) which you can use to install the plugin.
 * You can now forever use this version and any future version of this plugin for this app without restrictions.
 
+Once the license key (`abc` in this example) is received, you can add the plugin like this:
+
+```bash
+cordova plugin add cordova-plugin-native-keyboard --variable LICENSE=abc
+```
+
+Or if your iOS and Android package ids are different, use this (supported since plugin version 1.5.8):
+
+```bash
+cordova plugin add cordova-plugin-native-keyboard --variable LIC_ANDROID=abc --variable LIC_IOS=xyz
+```
+
 ## I heard about a trial!?
 ALL features are available without a license, but you'll be restricted to 5 minutes of usage. Just indefinitely kill and relaunch the app if you need more time ;)
 

@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-native-keyboard"
-        version="1.5.7">
+        version="1.5.8">
 
   <name>Native Keyboard</name>
 
@@ -34,6 +34,8 @@
   </js-module>
 
   <platform name="android">
+    <preference name="LIC_ANDROID" default="TRIAL" />
+
     <config-file parent="/*" target="res/xml/config.xml">
       <feature name="NativeKeyboard">
         <param name="android-package" value="nl.xservices.plugins.nativekeyboard.NativeKeyboard" />
@@ -54,18 +56,22 @@
     <source-file src="src/android/assets/fonts/fontawesome-webfont.ttf" target-dir="assets/fonts" />
     <source-file src="src/android/assets/fonts/ionicons.ttf" target-dir="assets/fonts" />
     <config-file target="res/values/nativekeyboard.xml" parent="/*">
-      <string name="NativeKeyboardPluginLicense">$LICENSE</string>
+      <string name="NativeKeyboardPluginLicense">$LIC_ANDROID</string>
+      <string name="NativeKeyboardPluginLicenseAlt">$LICENSE</string>
     </config-file>
 
     <!-- cordova-android >= 7 -->
     <source-file src="src/android/assets/fonts/fontawesome-webfont.ttf" target-dir="app/src/main/assets/fonts" />
     <source-file src="src/android/assets/fonts/ionicons.ttf" target-dir="app/src/main/assets/fonts" />
     <config-file target="app/src/main/res/values/nativekeyboard.xml" parent="/*">
-      <string name="NativeKeyboardPluginLicense">$LICENSE</string>
+      <string name="NativeKeyboardPluginLicense">$LIC_ANDROID</string>
+      <string name="NativeKeyboardPluginLicenseAlt">$LICENSE</string>
     </config-file>
   </platform>
 
   <platform name="ios">
+    <preference name="LIC_IOS" default="TRIAL" />
+
     <config-file target="config.xml" parent="/*">
       <feature name="NativeKeyboard">
         <param name="ios-package" value="CDVNativeKeyboard"/>
@@ -91,6 +97,9 @@
     </config-file>
 
     <config-file target="*-Info.plist" parent="NativeKeyboardPluginLicense">
+      <string>$LIC_IOS</string>
+    </config-file>
+    <config-file target="*-Info.plist" parent="NativeKeyboardPluginLicenseAlt">
       <string>$LICENSE</string>
     </config-file>
   </platform>
