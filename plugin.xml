@@ -45,7 +45,7 @@
 
     <lib-file src="src/android/lib/nativekeyboard.jar" />
 
-    <source-file src="src/android/NativeKeyboard.java" target-dir="app/src/main/java/nl/xservices/plugins/nativekeyboard" />
+    <source-file src="src/android/NativeKeyboard.java" target-dir="src/nl/xservices/plugins/nativekeyboard" />
 
     <source-file src="src/android/res/values/font_awesome.xml" target-dir="app/src/main/res/values" />
     <source-file src="src/android/res/drawable/cursor.xml" target-dir="app/src/main/res/drawable" />
