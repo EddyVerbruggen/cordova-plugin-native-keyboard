@@ -52,15 +52,6 @@
 
     <source-file src="src/android/res/values/nativekeyboard.xml" target-dir="res/values" />
 
-    <!-- cordova-android < 7 -->
-    <source-file src="src/android/assets/fonts/fontawesome-webfont.ttf" target-dir="assets/fonts" />
-    <source-file src="src/android/assets/fonts/ionicons.ttf" target-dir="assets/fonts" />
-    <config-file target="res/values/nativekeyboard.xml" parent="/*">
-      <string name="NativeKeyboardPluginLicense">$LIC_ANDROID</string>
-      <string name="NativeKeyboardPluginLicenseAlt">$LICENSE</string>
-    </config-file>
-
-    <!-- cordova-android >= 7 -->
     <source-file src="src/android/assets/fonts/fontawesome-webfont.ttf" target-dir="app/src/main/assets/fonts" />
     <source-file src="src/android/assets/fonts/ionicons.ttf" target-dir="app/src/main/assets/fonts" />
     <config-file target="app/src/main/res/values/nativekeyboard.xml" parent="/*">
