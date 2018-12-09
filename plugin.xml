@@ -36,7 +36,7 @@
   <platform name="android">
     <preference name="LIC_ANDROID" default="TRIAL" />
 
-    <config-file parent="/*" target="res/xml/config.xml">
+    <config-file parent="/*" target="app/src/main/res/xml/config.xml">
       <feature name="NativeKeyboard">
         <param name="android-package" value="nl.xservices.plugins.nativekeyboard.NativeKeyboard" />
         <param name="onload" value="true" />
@@ -45,12 +45,12 @@
 
     <lib-file src="src/android/lib/nativekeyboard.jar" />
 
-    <source-file src="src/android/NativeKeyboard.java" target-dir="src/nl/xservices/plugins/nativekeyboard" />
+    <source-file src="src/android/NativeKeyboard.java" target-dir="app/src/main/src/nl/xservices/plugins/nativekeyboard" />
 
-    <source-file src="src/android/res/values/font_awesome.xml" target-dir="res/values" />
-    <source-file src="src/android/res/drawable/cursor.xml" target-dir="res/drawable" />
+    <source-file src="src/android/res/values/font_awesome.xml" target-dir="app/src/main/res/values" />
+    <source-file src="src/android/res/drawable/cursor.xml" target-dir="app/src/main/res/drawable" />
 
-    <source-file src="src/android/res/values/nativekeyboard.xml" target-dir="res/values" />
+    <source-file src="src/android/res/values/nativekeyboard.xml" target-dir="app/src/main/res/values" />
 
     <source-file src="src/android/assets/fonts/fontawesome-webfont.ttf" target-dir="app/src/main/assets/fonts" />
     <source-file src="src/android/assets/fonts/ionicons.ttf" target-dir="app/src/main/assets/fonts" />
