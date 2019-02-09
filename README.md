@@ -165,7 +165,7 @@ NativeKeyboard.updateMessenger(
 - For best iPhone X support (and other iOS devices with rounded screens), update this plugin to at least 1.5.0, and add [`viewport-fit=cover` to your viewport](https://github.com/EddyVerbruggen/cordova-plugin-native-keyboard/blob/84fa7ce962f1b56cc71b1d1f2454c46ba3b8aca7/demo/index.html#L6).
 
 ## Notes for Android
-- If you're using cordova-android 7 or higher, update the plugin to at least 1.5.2 because cordova-android 7 has slightly different internals, causing the license validity check to no longer work - meaning the plugin would stop working after 5 minutes. This was fixed in 1.5.2 (and it's backward compatible with older versions of cordova-android).
+- If you're using cordova-android 7.1 or higher, update the plugin to at least 2.0.0 because cordova-android 7.1 has slightly different internals, making installation fail. With older Cordova Android versions you may need to stick to the 1.x version though.
 - Make sure your `activity` in `AndroidManifest.xml` has the (default) `android:windowSoftInputMode="adjustResize"` (or `adjustPan`) property. Otherwise the inputfield will be hidden when the keyboard pops up.
 
 ## I like it, hook me up!
