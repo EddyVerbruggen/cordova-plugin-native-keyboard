@@ -5,6 +5,9 @@
 
 BOOL DEBUG_KEYBOARD = NO;
 
+// a little hack for when the messenger keyboard has been shown and hidden, then a regular textfield is shown - this prevents the messenger bar from being shown
+int CDVNativeKeyboardHideKeyboardOffscreenOffset = 0;
+
 // TODO move as much as possible to the helper, and move this to the framwework and wire the Cordova-SLK stuff via the NKHelper class
 NKSLKTextViewController * tvc;
 
@@ -123,10 +126,13 @@ int maxlength;
 
   if (tvc == nil) {
       tvc = [[NKSLKTextViewController alloc] initWithScrollView:self.webView.scrollView];
+  } else if (CDVNativeKeyboardHideKeyboardOffscreenOffset != 0) {
+      tvc.view.frame = CGRectMake(tvc.view.frame.origin.x, tvc.view.frame.origin.y, tvc.view.frame.size.width, tvc.view.frame.size.height - CDVNativeKeyboardHideKeyboardOffscreenOffset);
+      CDVNativeKeyboardHideKeyboardOffscreenOffset = 0;
   }
 
   [tvc configureMessengerWithCommand:command andCommandDelegate:self.commandDelegate];
-    
+
   NSArray * ors = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
   NSArray * suppOrientations = [((CDVViewController*)self.viewController) parseInterfaceOrientations:ors];
   [tvc setSupportedInterfaceOrientations:suppOrientations];
@@ -170,8 +176,11 @@ int maxlength;
 - (void)hideMessenger:(CDVInvokedUrlCommand*)command {
   if (tvc != nil) {
     NSDictionary* options = [command argumentAtIndex:0];
-    [tvc setTextInputbarHidden:YES animated:[options[@"animated"] boolValue]];
-//    tvc = nil;
+      [tvc setTextInputbarHidden:YES animated:[options[@"animated"] boolValue]];
+      if (CDVNativeKeyboardHideKeyboardOffscreenOffset == 0) {
+          CDVNativeKeyboardHideKeyboardOffscreenOffset = 500; // at least the height of the keyboard + messenger bar (this is ok)
+          tvc.view.frame = CGRectMake(tvc.view.frame.origin.x, tvc.view.frame.origin.y, tvc.view.frame.size.width, tvc.view.frame.size.height + CDVNativeKeyboardHideKeyboardOffscreenOffset);
+      }
   }
 }
 
