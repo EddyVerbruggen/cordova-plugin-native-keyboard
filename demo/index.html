@@ -207,6 +207,10 @@
         console.log("keyboard shows, height is: " + height);
         //appendMessage("keyboard shows, height is: " + height);
       },
+      onMessengerBarHeightChanged: function (height) {
+        console.log("messenger bar height changed to: " + height);
+        //appendMessage("keyboard shows, height is: " + height);
+      },
       onKeyboardWillHide: function () {
         console.log("keyboard will hide");
       },
@@ -216,6 +220,9 @@
       onTextChanged: function(newText) {
         console.log("text changed to: " + newText);
         //appendMessage(newText);
+      },
+      onContentHeightChanged: function(heightDiff) {
+        console.log("content height changed by: " + heightDiff);
       },
       showKeyboard: true,
       type: "twitter", // iOS only, default (default) | decimalpad | phonepad | numberpad | namephonepad | number | email | twitter | url | alphabet | search | ascii
