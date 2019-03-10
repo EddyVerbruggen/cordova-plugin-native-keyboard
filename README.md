@@ -62,6 +62,7 @@ There are however __many__ options you can pass in to tweak the appearance and b
 |`onKeyboardDidShow`||yes|yes|A function invoked when the keyboard popped up. Receives the height as a single property.
 |`onKeyboardWillHide`||yes|no|A function invoked when the keyboard is about to close.
 |`onKeyboardDidHide`||yes|yes|A function invoked when the keyboard closed.
+|`onMessengerBarHeightChanged`||yes|yes|A function invoked when the height of the messenger bar (without the keyboard) changes.
 |`onTextChanged`||yes|yes|A function invoked when any key is pressed, sends the entire text as response.
 |`autoscrollElement`||yes|yes|Highly recommended to pass in if you want to replicate the behavior of the video's above (scroll down when the keyboard opens). Pass in the scrollable DOM element containing the messages, so something like `document.getElementById("messageList")`.
 |`scrollToBottomAfterMessengerShows`||yes|yes|If `autoscrollElement` was set you can also make the list scroll down initially, when the messenger bar (without the keyboard popping up) is shown.
