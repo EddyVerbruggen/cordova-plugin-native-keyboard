@@ -67,6 +67,7 @@ BOOL _keepOpenAfterSubmit;
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"keyboardDidShow":@(YES), @"keyboardHeight":[NSNumber numberWithFloat:_baseKeyboardHeight+_lastContentHeight]}];
     pluginResult.keepCallback = [NSNumber numberWithBool:YES];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
+    [self sendMessengerBarHeightChangedEvent];
   } else if (SLKKeyboardStatusWillHide == status) {
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"keyboardWillHide":@(YES)}];
     pluginResult.keepCallback = [NSNumber numberWithBool:YES];
@@ -75,6 +76,7 @@ BOOL _keepOpenAfterSubmit;
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"keyboardDidHide":@(YES)}];
     pluginResult.keepCallback = [NSNumber numberWithBool:YES];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
+    [self sendMessengerBarHeightChangedEvent];
   }
 }
 
@@ -109,8 +111,18 @@ BOOL _keepOpenAfterSubmit;
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"contentHeight":[NSNumber numberWithFloat:height], @"contentHeightDiff":[NSNumber numberWithFloat:diff]}];
     pluginResult.keepCallback = [NSNumber numberWithBool:YES];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
+    [self sendMessengerBarHeightChangedEvent];
   }
   _lastContentHeight = height;
+}
+
+- (void)sendMessengerBarHeightChangedEvent {
+    UIView* messengerBar = [self.textView superview];
+    CGFloat height = messengerBar.frame.size.height;
+
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"messengerBarHeightChanged":@(YES), @"messengerBarHeight":[NSNumber numberWithFloat:height]}];
+    pluginResult.keepCallback = [NSNumber numberWithBool:YES];
+    [_commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
 }
 
 - (void)didPressLeftButton:(id)sender {
