@@ -48,13 +48,6 @@ BOOL _keepOpenAfterSubmit;
   [self didChangeKeyboardStatus:SLKKeyboardStatusDidShow];
 }
 
-// The default is 'NO' which also means the 'keyboardWillHide' is not fired.
-// Note that for WKWebView users this will return 'NO' again, so that event is not fired.
-- (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder
-{
-  return [responder isKindOfClass:[UIWebView class]];
-}
-
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status {
   [super didChangeKeyboardStatus:status];
   CGFloat height = self.textView.frame.size.height;
